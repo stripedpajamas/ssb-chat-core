@@ -1,0 +1,50 @@
+{
+  "name": "ssb-chat-core",
+  "version": "1.0.0",
+  "description": "scuttlebutt chat core",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stripedpajamas/scat-core.git"
+  },
+  "keywords": [
+    "scuttlebutt",
+    "chat",
+    "ssb"
+  ],
+  "author": "Peter Squicciarini <stripedpajamas273@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stripedpajamas/scat-core/issues"
+  },
+  "homepage": "https://github.com/stripedpajamas/scat-core#readme",
+  "devDependencies": {
+    "standard": "^11.0.1"
+  },
+  "dependencies": {
+    "immutable": "^3.8.2",
+    "node-persist": "^2.1.0",
+    "pull-stream": "^3.6.7",
+    "punycode": "^2.1.1",
+    "scuttlebot": "^11.3.3",
+    "ssb-about": "^0.1.2",
+    "ssb-backlinks": "^0.7.2",
+    "ssb-blobs": "^1.1.5",
+    "ssb-client": "^4.5.7",
+    "ssb-config": "^2.2.0",
+    "ssb-ebt": "^5.2.1",
+    "ssb-friends": "^2.4.0",
+    "ssb-keys": "^7.0.16",
+    "ssb-meme": "^1.0.4",
+    "ssb-names": "^3.1.2",
+    "ssb-ooo": "^1.0.9",
+    "ssb-private": "^0.2.1",
+    "ssb-query": "^2.1.0",
+    "ssb-ref": "^2.11.1",
+    "ssb-search": "^1.1.2",
+    "ssb-ws": "^2.1.1"
+  }
+}
