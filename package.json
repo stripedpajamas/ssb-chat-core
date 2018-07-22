@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stripedpajamas/scat-core.git"
+    "url": "git+https://github.com/stripedpajamas/ssb-chat-core.git"
   },
   "keywords": [
     "scuttlebutt",
@@ -18,9 +18,9 @@
   "author": "Peter Squicciarini <stripedpajamas273@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stripedpajamas/scat-core/issues"
+    "url": "https://github.com/stripedpajamas/ssb-chat-core/issues"
   },
-  "homepage": "https://github.com/stripedpajamas/scat-core#readme",
+  "homepage": "https://github.com/stripedpajamas/ssb-chat-core#readme",
   "devDependencies": {
     "standard": "^11.0.1"
   },

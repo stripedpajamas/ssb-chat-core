@@ -35,6 +35,7 @@ const getId = (name) => {
     })
   return authorId || name
 }
+const getAll = () => state.get('authors')
 // #endregion
 
 // #region me actions
@@ -240,6 +241,7 @@ const hasThisBeenRead = (message) => storage.getItemSync(message.key)
 
 actions = module.exports = {
   authors: {
+    get: getAll,
     setName,
     getName,
     getId
