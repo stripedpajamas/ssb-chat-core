@@ -1,6 +1,7 @@
 const pull = require('pull-stream')
 const connect = require('./connect')
 const state = require('./state')
+const events = require('./state/events')
 const constants = require('./util/constants')
 const processor = require('./util/processor')
 const messenger = require('./messenger')
@@ -13,6 +14,8 @@ module.exports = {
   state,
   messenger,
   commands,
+  constants,
+  events,
   authors: actions.authors,
   me: actions.me,
   messages: actions.messages,

@@ -1,6 +1,7 @@
 const Immutable = require('immutable')
 const punycode = require('punycode') // eslint-disable-line
 const state = require('./')
+const events = require('./events')
 const storage = require('../util/storage')
 const constants = require('../util/constants')
 
@@ -133,6 +134,7 @@ const setPublic = () => {
   state.set('mode', constants.MODE.PUBLIC)
   actions.recipients.reset()
   actions.messages.refreshFiltered()
+  events.mode._change(constants.MODE.PUBLIC)
 }
 const setPrivate = () => {
   state.set('mode', constants.MODE.PRIVATE)
@@ -151,6 +153,9 @@ const setPrivate = () => {
 
   // mark all messages in this conversation as read
   actions.storage.markFilteredMessagesRead()
+
+  // fire the mode change hook
+  events.mode._change(constants.MODE.PRIVATE)
 }
 const isPrivate = () => {
   return state.get('mode') === constants.MODE.PRIVATE
