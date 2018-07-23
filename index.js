@@ -26,7 +26,13 @@ module.exports = {
   options: actions.options,
   start: (opts, cb) => {
     actions.options.setOptions(opts)
-    let timeWindow = actions.options.get().get('timeWindow') || constants.TIME_WINDOW
+
+    let timeWindow = actions.options.get().get('timeWindow')
+    if (!timeWindow) {
+      timeWindow = constants.TIME_WINDOW
+      actions.options.set('timeWindow', constants.TIME_WINDOW)
+    }
+
     const since = Date.now() - timeWindow
 
     connect.start((err, server) => {
