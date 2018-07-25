@@ -10,6 +10,8 @@ const commands = require('./commands')
 // state actions
 const actions = require('./state/actions')
 
+let started
+
 module.exports = {
   state,
   messenger,
@@ -25,6 +27,12 @@ module.exports = {
   sbot: actions.sbot,
   options: actions.options,
   start: (opts, cb) => {
+    if (started) {
+      // don't double start, thanks @korlando7
+      cb()
+      return
+    }
+    started = true
     actions.options.setOptions(opts)
 
     let timeWindow = actions.options.get().get('timeWindow')
