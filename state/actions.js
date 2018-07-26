@@ -23,8 +23,10 @@ const setName = (author, name, setter) => {
   }
 
   state.setIn(['authors', author], { name: cleanName, setter })
-  // new author event
-  events.authors._new()
+  // so many authors... only send an event if this is someone that sent something
+  if (actions.messages.get().some(msg => msg.author === author)) {
+    events.authors._new()
+  }
 }
 const getName = (id) => {
   const name = state.getIn(['authors', id, 'name'])
