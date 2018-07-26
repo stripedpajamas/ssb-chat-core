@@ -23,6 +23,8 @@ const setName = (author, name, setter) => {
   }
 
   state.setIn(['authors', author], { name: cleanName, setter })
+  // new author event
+  events.authors._new()
 }
 const getName = (id) => {
   const name = state.getIn(['authors', id, 'name'])
@@ -125,6 +127,8 @@ const push = (msg) => {
   }
 
   refreshFiltered()
+  // new message event
+  events.messages._new()
 }
 // #endregion
 
@@ -193,6 +197,9 @@ const setPrivateRecipients = (recipients) => {
   actions.unreads.setAsRead(privateRecipients)
   state.set('privateRecipients', privateRecipients)
 
+  // add these recipients to recents storage
+  actions.recents.set(privateRecipients)
+
   actions.mode.setPrivate()
 }
 const getNotMe = () => getPrivateRecipients()
@@ -235,13 +242,24 @@ const setOption = (key, val) => {
 const storeAsRead = (message) => {
   const timeWindow = actions.options.get().get('timeWindow')
   const ttl = (message.get('timestamp') + timeWindow) - Date.now()
-  storage.setItemSync(message.get('key'), true, { ttl })
+  storage.readStorage.setItemSync(message.get('key'), true, { ttl })
 }
 const markFilteredMessagesRead = () => {
   const filteredMessages = actions.messages.get()
   filteredMessages.forEach(msg => storeAsRead(msg))
 }
-const hasThisBeenRead = (message) => storage.getItemSync(message.key)
+const hasThisBeenRead = (message) => storage.readStorage.getItemSync(message.key)
+// #endregion
+
+// #region recent actions
+const getRecents = () => {
+  const recents = storage.recentStorage.keys()
+  return recents.map(r => r.split(','))
+}
+const setRecent = (recipients) => {
+  const key = recipients.toArray().join(',')
+  storage.recentStorage.setItemSync(key, true)
+}
 // #endregion
 
 actions = module.exports = {
@@ -294,5 +312,9 @@ actions = module.exports = {
   storage: {
     markFilteredMessagesRead,
     hasThisBeenRead
+  },
+  recents: {
+    get: getRecents,
+    set: setRecent
   }
 }

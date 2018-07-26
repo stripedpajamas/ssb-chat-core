@@ -5,17 +5,17 @@ dependencies:
   punycode: 2.1.1
   scuttlebot: 11.3.3
   ssb-about: 0.1.2
-  ssb-backlinks: 0.7.2
+  ssb-backlinks: 0.7.3
   ssb-blobs: 1.1.5
   ssb-client: 4.5.7
   ssb-config: 2.2.0
-  ssb-ebt: 5.2.1
+  ssb-ebt: 5.2.2
   ssb-friends: 2.4.0
   ssb-keys: 7.0.16
   ssb-meme: 1.0.4
   ssb-names: 3.1.2
   ssb-ooo: 1.0.9
-  ssb-private: 0.2.1
+  ssb-private: 0.2.3
   ssb-query: 2.1.0
   ssb-ref: 2.11.1
   ssb-search: 1.1.2
@@ -235,10 +235,12 @@ packages:
   /balanced-match/1.0.0:
     resolution:
       integrity: sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
-  /base64-url/1.3.3:
+  /base64-url/2.2.0:
     dev: false
+    engines:
+      node: '>=6'
     resolution:
-      integrity: sha1-+LbFN/CaT8WMmcuG4LDpxhRhog8=
+      integrity: sha512-Y4qHHAE+rWjmAFPQmHPiiD+hWwM/XvuFLlP6kVxlwZJK7rjiE2uIQR9tZ37iEr1E6iCj9799yxMAmiXzITb3lQ==
   /bash-color/0.0.4:
     dev: false
     resolution:
@@ -3052,7 +3054,7 @@ packages:
       object-assign: 4.1.1
       trim: 0.0.1
       trim-lines: 1.1.1
-      unist-util-visit: 1.3.1
+      unist-util-visit: 1.4.0
     dev: false
     resolution:
       integrity: sha1-WSo0e909WIH08IDJi1sVL7FAepI=
@@ -3255,7 +3257,7 @@ packages:
       ssb-blobs: 1.1.5
       ssb-client: 4.5.7
       ssb-config: 2.2.0
-      ssb-ebt: 5.2.1
+      ssb-ebt: 5.2.2
       ssb-friends: 2.4.0
       ssb-keys: 7.0.16
       ssb-links: 3.0.3
@@ -3491,9 +3493,9 @@ packages:
     dev: false
     resolution:
       integrity: sha512-/dvDJZdvukOHTjWDAUDdi5euG3fHIgW0z8xIWI+n+C3ugDCPad24josbRBMtgJ6e5piKOzstTlumIqfekvv8YQ==
-  /ssb-backlinks/0.7.2:
+  /ssb-backlinks/0.7.3:
     dependencies:
-      base64-url: 1.3.3
+      base64-url: 2.2.0
       deep-equal: 1.0.1
       flumeview-query: 6.2.0
       pull-stream: 3.6.8
@@ -3502,7 +3504,7 @@ packages:
       xtend: 4.0.1
     dev: false
     resolution:
-      integrity: sha512-qdx+n0+LtnaN68LF0qhfqz/lR2cTvRI3DCQ85WuIm7v1eH/m+9A9bm3DP2nGTUsVbxAtfdSif2kJ41vMshyrgw==
+      integrity: sha512-84s5phSVyZsYV0FTmBJvICPgOMuu8ouzukG8Gz2XtuOui95GBP/G7UIBURgYVS82XA6g9xPA/jf38fsMxid38Q==
   /ssb-blobs/1.1.5:
     dependencies:
       cont: 1.0.3
@@ -3537,9 +3539,9 @@ packages:
     dev: false
     resolution:
       integrity: sha1-QcrQOKhXWvQGLT/VfTsWe+hbA7w=
-  /ssb-ebt/5.2.1:
+  /ssb-ebt/5.2.2:
     dependencies:
-      base64-url: 1.3.3
+      base64-url: 2.2.0
       epidemic-broadcast-trees: 6.3.3
       lossy-store: 1.2.3
       pull-stream: 3.6.8
@@ -3547,7 +3549,7 @@ packages:
       ssb-ref: 2.11.1
     dev: false
     resolution:
-      integrity: sha512-Tcxqng+k5w5v7OSG4AYxShqGGMDhAsRqDMBoVO/6H6RYTgBxRqh/oVF6uK/VLB5yn0+V66+cSBreaq4mcYytDg==
+      integrity: sha512-De3dUnmgs/8aYl2fmi/MtJljR9qw1mUmpdM4qeCf+4uniqlNNhfn1Ux+M5A8XYVuI+TD4GkgmIDeZH6miey2kw==
   /ssb-friends/2.4.0:
     dependencies:
       flumeview-reduce: 1.3.13
@@ -3614,16 +3616,16 @@ packages:
     dev: false
     resolution:
       integrity: sha1-Lz2Z+FuNx6OEHp/0CgsKmz/nYGQ=
-  /ssb-private/0.2.1:
+  /ssb-private/0.2.3:
     dependencies:
-      base64-url: 1.3.3
+      base64-url: 2.2.0
       explain-error: 1.0.4
       flumeview-query: 6.2.0
       pull-stream: 3.6.8
       ssb-keys: 7.0.16
     dev: false
     resolution:
-      integrity: sha512-Y5t8gS+rrHn9tche3/Vm/di4duciJ3YUjejs6T3e7ESsmj8IyjVKsMrlcCbi/KlQ35wtQeWSwMIY4yKjlrD5uQ==
+      integrity: sha512-SiLBKOB1hxkrohzOrRWURlzj6HvPFvr9LLd5P5I5C5KU/RtaWe79nYuFgjUFJFnjWw7X4szCy32/EZMihV1l/Q==
   /ssb-query/2.1.0:
     dependencies:
       explain-error: 1.0.4
@@ -3970,12 +3972,18 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YkXBK/H9raAmG7KXck+UUpnKiNmUdB+aBGrknfQ4EreE1banuzrKABx3jP6Z5Z3fMSPMQQmeXBlKpCbMwBkxVw==
-  /unist-util-visit/1.3.1:
+  /unist-util-visit-parents/2.0.1:
     dependencies:
       unist-util-is: 2.1.2
     dev: false
     resolution:
-      integrity: sha512-0fdB9EQJU0tho5tK0VzOJzAQpPv2LyLZ030b10GxuzAWEfvd54mpY7BMjQ1L69k2YNvL+SvxRzH0yUIehOO8aA==
+      integrity: sha512-6B0UTiMfdWql4cQ03gDTCSns+64Zkfo2OCbK31Ov0uMizEz+CJeAp0cgZVb5Fhmcd7Bct2iRNywejT0orpbqUA==
+  /unist-util-visit/1.4.0:
+    dependencies:
+      unist-util-visit-parents: 2.0.1
+    dev: false
+    resolution:
+      integrity: sha512-FiGu34ziNsZA3ZUteZxSFaczIjGmksfSgdKqBfOejrrfzyUy5b7YrlzT1Bcvi+djkYDituJDy2XB7tGTeBieKw==
   /untildify/2.1.0:
     dependencies:
       os-homedir: 1.0.2
