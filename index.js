@@ -26,6 +26,7 @@ module.exports = {
   unreads: actions.unreads,
   sbot: actions.sbot,
   options: actions.options,
+  recents: actions.recents,
   start: (opts, cb) => {
     if (started) {
       // don't double start, thanks @korlando7
