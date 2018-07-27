@@ -94,6 +94,7 @@ const refreshFiltered = () => {
     state.set('filteredMessages', messages.filter(msg => {
       return msg.get('private') && actions.recipients.compare(msg.get('recipients'), actions.recipients.get())
     }))
+    events.emit('messages-changed', getMessages())
     return
   }
   state.set('filteredMessages', messages.filter(msg => !msg.get('private')))
