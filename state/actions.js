@@ -23,11 +23,14 @@ const setName = (author, name, setter) => {
   }
 
   state.setIn(['authors', author], { name: cleanName, setter })
-  // so many authors... only send an event if this is someone that sent something
-  if (actions.messages.get().some(msg => msg.author === author)) {
-    events.emit('authors-changed', state.get('authors'))
+
+  // if this author wrote a message they are relevant
+  if (actions.messages.get().some(msg => msg.get('author') === author)) {
+    state.setIn(['relevantAuthors', author], { name: cleanName, setter })
+    events.emit('authors-changed', getRelevant())
   }
 }
+const getRelevant = () => state.get('relevantAuthors')
 const getName = (id) => {
   const name = state.getIn(['authors', id, 'name'])
   return name || id
@@ -94,6 +97,7 @@ const refreshFiltered = () => {
     return
   }
   state.set('filteredMessages', messages.filter(msg => !msg.get('private')))
+  events.emit('messages-changed', getMessages())
 }
 const push = (msg) => {
   addInPlace(msg)
@@ -134,8 +138,6 @@ const push = (msg) => {
   }
 
   refreshFiltered()
-  // new message event
-  events.emit('messages-changed', state.get('messages'))
 }
 // #endregion
 
@@ -277,7 +279,8 @@ const setRecent = (recipients) => {
 
 actions = module.exports = {
   authors: {
-    get: getAll,
+    get: getRelevant,
+    getAll,
     setName,
     getName,
     getId
