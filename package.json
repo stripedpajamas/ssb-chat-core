@@ -1,6 +1,6 @@
 {
   "name": "ssb-chat-core",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "scuttlebutt chat core",
   "main": "index.js",
   "scripts": {
