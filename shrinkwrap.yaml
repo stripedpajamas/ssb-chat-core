@@ -1,5 +1,6 @@
 dependencies:
   immutable: 3.8.2
+  nanobus: 4.3.3
   node-persist: 2.1.0
   pull-stream: 3.6.8
   punycode: 2.1.1
@@ -2239,6 +2240,30 @@ packages:
     dev: false
     resolution:
       integrity: sha512-bAdJv7fBLhWC+/Bls0Oza+mvTaNQtP+1RyhhhvD95pgUJz6XM5IzgmxOkItJ9tkoCiplvAnXI1tNmmUD/eScyA==
+  /nanoassert/1.1.0:
+    dev: false
+    resolution:
+      integrity: sha1-TzFS4JVA/eKMdvRLGbvNHVpCR40=
+  /nanobus/4.3.3:
+    dependencies:
+      nanotiming: 7.3.1
+      remove-array-items: 1.0.0
+    dev: false
+    resolution:
+      integrity: sha512-4/uzl+LkMGoVv/9eMzH2QFvefmlJErT0KR7EmuYbmht2QvxSEqTjhFFOZ/KHE6chH58fKL3njrOcEwbYV0h9Yw==
+  /nanoscheduler/1.0.3:
+    dependencies:
+      nanoassert: 1.1.0
+    dev: false
+    resolution:
+      integrity: sha512-jBbrF3qdU9321r8n9X7yu18DjP31Do2ItJm3mWrt90wJTrnDO+HXpoV7ftaUglAtjgj9s+OaCxGufbvx6pvbEQ==
+  /nanotiming/7.3.1:
+    dependencies:
+      nanoassert: 1.1.0
+      nanoscheduler: 1.0.3
+    dev: false
+    resolution:
+      integrity: sha512-l3lC7v/PfOuRWQa8vV29Jo6TG10wHtnthLElFXs4Te4Aas57Fo4n1Q8LH9n+NDh9riOzTVvb2QNBhTS4JUKNjw==
   /natural-compare/1.4.0:
     dev: true
     resolution:
@@ -3095,6 +3120,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-gCo4w6qYyeHj6gFe66IR0ny2Xh8=
+  /remove-array-items/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-B79CyzMvTPboXq2DteToltIyayE=
   /remove-trailing-separator/1.1.0:
     dev: false
     resolution:
@@ -4121,6 +4150,7 @@ shrinkwrapMinorVersion: 8
 shrinkwrapVersion: 3
 specifiers:
   immutable: ^3.8.2
+  nanobus: ^4.3.3
   node-persist: ^2.1.0
   pull-stream: ^3.6.7
   punycode: ^2.1.1

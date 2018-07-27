@@ -25,7 +25,7 @@ const setName = (author, name, setter) => {
   state.setIn(['authors', author], { name: cleanName, setter })
   // so many authors... only send an event if this is someone that sent something
   if (actions.messages.get().some(msg => msg.author === author)) {
-    events.authors._new()
+    events.emit('authors-changed', state.get('authors'))
   }
 }
 const getName = (id) => {
@@ -45,11 +45,15 @@ const getAll = () => state.get('authors')
 
 // #region me actions
 const getMe = () => state.get('me')
-const setMe = (me) => state.set('me', me)
+const setMe = (me) => {
+  state.set('me', me)
+  events.emit('me-changed', state.get('me'))
+}
 const addName = (name) => {
   const oldMyNames = state.get('myNames')
   const newMyNames = oldMyNames.add(name)
   state.set('myNames', newMyNames)
+  events.emit('my-names-changed', state.get('myNames'))
 }
 const names = () => state.get('myNames')
 // #endregion
@@ -122,6 +126,7 @@ const push = (msg) => {
           if (!actions.storage.hasThisBeenRead(msg)) {
             // then push to unreads on state
             state.set('unreads', currentUnreads.push(unreadRecipients))
+            events.emit('unreads-changed', state.get('unreads'))
           }
         }
       }
@@ -130,7 +135,7 @@ const push = (msg) => {
 
   refreshFiltered()
   // new message event
-  events.messages._new()
+  events.emit('messages-changed', state.get('messages'))
 }
 // #endregion
 
@@ -140,7 +145,7 @@ const setPublic = () => {
   state.set('mode', constants.MODE.PUBLIC)
   actions.recipients.reset()
   actions.messages.refreshFiltered()
-  events.mode._change(constants.MODE.PUBLIC)
+  events.emit('mode-changed', constants.MODE.PUBLIC)
 }
 const setPrivate = () => {
   state.set('mode', constants.MODE.PRIVATE)
@@ -161,7 +166,7 @@ const setPrivate = () => {
   actions.storage.markFilteredMessagesRead()
 
   // fire the mode change hook
-  events.mode._change(constants.MODE.PRIVATE)
+  events.emit('mode-changed', constants.MODE.PRIVATE)
 }
 const isPrivate = () => {
   return state.get('mode') === constants.MODE.PRIVATE
@@ -173,9 +178,11 @@ const resetPrivateRecipients = () => {
   const pr = getPrivateRecipients()
   if (pr.size) {
     state.set('lastPrivateRecipients', getPrivateRecipients())
+    events.emit('last-recipients-changed', state.get('lastPrivateRecipients'))
   }
   state.set('privateRecipients', Immutable.Set())
   state.set('privateMessageRoot', '')
+  events.emit('recipients-changed', state.get('privateRecipients'))
 }
 const compare = (a, b) => {
   if (!Immutable.Set.isSet(a) || !Immutable.Set.isSet(b)) {
@@ -203,6 +210,7 @@ const setPrivateRecipients = (recipients) => {
   actions.recents.set(privateRecipients)
 
   actions.mode.setPrivate()
+  events.emit('recipients-changed', state.get('privateRecipients'))
 }
 const getNotMe = () => getPrivateRecipients()
   .filter(r => r !== actions.me.get())
@@ -227,6 +235,7 @@ const setAsRead = (recps) => {
     return !actions.recipients.compare(filteredRecps, unreadRecps)
   })
   state.set('unreads', newUnreads)
+  events.emit('unreads-changed', state.get('unreads'))
 }
 // #endregion
 
@@ -237,6 +246,7 @@ const setOptions = (opts) => {
 }
 const setOption = (key, val) => {
   state.setIn(['options', key], val)
+  events.emit('options-changed', state.get('options'))
 }
 // #endregion
 

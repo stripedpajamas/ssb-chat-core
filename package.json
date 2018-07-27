@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "immutable": "^3.8.2",
+    "nanobus": "^4.3.3",
     "node-persist": "^2.1.0",
     "pull-stream": "^3.6.7",
     "punycode": "^2.1.1",
