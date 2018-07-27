@@ -24,11 +24,19 @@ const setName = (author, name, setter) => {
 
   state.setIn(['authors', author], { name: cleanName, setter })
 
+  updateRelevant()
+}
+const updateRelevant = () => {
   // if this author wrote a message they are relevant
-  if (actions.messages.get().some(msg => msg.get('author') === author)) {
-    state.setIn(['relevantAuthors', author], { name: cleanName, setter })
-    events.emit('authors-changed', getRelevant())
-  }
+  let newRelevantAuthors = Immutable.Set()
+  actions.messages.get().forEach((msg) => {
+    const author = state.getIn(['authors', msg.get('author')])
+    if (author) {
+      newRelevantAuthors = newRelevantAuthors.add(author)
+    }
+  })
+  state.set('relevantAuthors', newRelevantAuthors)
+  events.emit('authors-changed', getRelevant())
 }
 const getRelevant = () => state.get('relevantAuthors')
 const getName = (id) => {
@@ -139,6 +147,9 @@ const push = (msg) => {
   }
 
   refreshFiltered()
+
+  // relevant authors may have changed since a new message is on the stack
+  actions.authors.update()
 }
 // #endregion
 
@@ -281,6 +292,7 @@ const setRecent = (recipients) => {
 actions = module.exports = {
   authors: {
     get: getRelevant,
+    update: updateRelevant,
     getAll,
     setName,
     getName,
