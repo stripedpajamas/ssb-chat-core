@@ -271,6 +271,7 @@ const getRecents = () => {
 const setRecent = (recipients) => {
   const key = recipients.toArray().join(',')
   storage.recentStorage.setItemSync(key, true)
+  events.emit('recents-changed', getRecents())
 }
 // #endregion
 
