@@ -24,19 +24,29 @@ const setName = (author, name, setter) => {
 
   state.setIn(['authors', author], { name: cleanName, setter })
 
-  updateRelevant()
-}
-const updateRelevant = () => {
-  // if this author wrote a message they are relevant
-  let newRelevantAuthors = Immutable.Set()
-  actions.messages.get().forEach((msg) => {
-    const author = state.getIn(['authors', msg.get('author')])
-    if (author) {
-      newRelevantAuthors = newRelevantAuthors.add(author)
+  // is this already in relevant authors?
+  const alreadyRelevant = state.getIn(['relevantAuthors', author])
+
+  if (alreadyRelevant) {
+    // is the name different?
+    const nameDifferent = alreadyRelevant.get('name') !== cleanName
+    if (nameDifferent) {
+      state.setIn(['relevantAuthors', author], { name: cleanName, setter })
+      events.emit('authors-changed', getRelevant())
     }
-  })
-  state.set('relevantAuthors', newRelevantAuthors)
-  events.emit('authors-changed', getRelevant())
+  }
+
+  // is this an author that is relevant but we don't have info on?
+  const unknownRelevant = state.getIn(['unknownRelevantAuthors', author])
+  if (unknownRelevant) {
+    const currentRelevants = state.get('relevantAuthors')
+    state.set('relevantAuthors', currentRelevants.set(author, Immutable.fromJS({ name: cleanName, setter })))
+    events.emit('authors-changed', getRelevant())
+
+    // and remove it from unknowns
+    const currentUnknowns = state.get('unknownRelevantAuthors')
+    state.set('unknownRelevantAuthors', currentUnknowns.remove(author))
+  }
 }
 const getRelevant = () => state.get('relevantAuthors')
 const getName = (id) => {
@@ -148,8 +158,24 @@ const push = (msg) => {
 
   refreshFiltered()
 
-  // relevant authors may have changed since a new message is on the stack
-  actions.authors.update()
+  // is the author of this message already relevant?
+  const alreadyRelevant = state.getIn(['relevantAuthors', msg.author])
+  if (!alreadyRelevant) {
+    // if not, get the truth from global authors and update relevant authors
+    const currentRelevants = state.get('relevantAuthors')
+    const author = state.getIn(['authors', msg.author])
+
+    // well what if we don't know about this author yet?
+    // then we need to queue it up so that when we do know about it
+    // we can update relevant authors
+    if (!author) {
+      const currentUnknowns = state.get('unknownRelevantAuthors')
+      state.set('unknownRelevantAuthors', currentUnknowns.add(msg.author))
+    } else {
+      state.set('relevantAuthors', currentRelevants.set(msg.author, author))
+      events.emit('authors-changed', getRelevant())
+    }
+  }
 }
 // #endregion
 
@@ -292,7 +318,6 @@ const setRecent = (recipients) => {
 actions = module.exports = {
   authors: {
     get: getRelevant,
-    update: updateRelevant,
     getAll,
     setName,
     getName,

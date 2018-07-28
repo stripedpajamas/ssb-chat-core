@@ -2,7 +2,8 @@ const Immutable = require('immutable')
 const constants = require('../util/constants')
 
 module.exports = Immutable.Map({
-  relevantAuthors: Immutable.Set(),
+  relevantAuthors: Immutable.Map(),
+  unknownRelevantAuthors: Immutable.Set(),
   authors: Immutable.Map(),
   options: Immutable.Map({ debug: false, timeWindow: constants.TIME_WINDOW }),
   filteredMessages: Immutable.List(),
