@@ -13,12 +13,33 @@ module.exports = {
       return resolve({ command: true, result: state.get(path) })
     }
   }),
+  block: (id) => new Promise((resolve, reject) => {
+    if (!id) {
+      return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.BAD_ARGS })
+    }
+
+    const realId = authors.getId(id)
+
+    if (!ref.isFeedId(realId)) {
+      return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.NO_ID })
+    }
+
+    return messenger.modules.block(realId, true)
+      .then(() => resolve({ command: true, result: `Blocked ${id}` }))
+      .catch(() => reject(new Error(`Could not block ${id}`)))
+  }),
   follow: (id) => new Promise((resolve, reject) => {
     if (!id) {
       return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.BAD_ARGS })
     }
 
-    return messenger.modules.follow(id, true)
+    const realId = authors.getId(id)
+
+    if (!ref.isFeedId(realId)) {
+      return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.NO_ID })
+    }
+
+    return messenger.modules.follow(realId, true)
       .then(() => resolve({ command: true, result: `Followed ${id}` }))
       .catch(() => reject(new Error(`Could not follow ${id}`)))
   }),
@@ -91,12 +112,33 @@ module.exports = {
       .then(() => resolve({ command: true }))
       .catch((e) => reject(e))
   }),
+  unblock: (id) => new Promise((resolve, reject) => {
+    if (!id) {
+      return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.BAD_ARGS })
+    }
+
+    const realId = authors.getId(id)
+
+    if (!ref.isFeedId(realId)) {
+      return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.NO_ID })
+    }
+
+    return messenger.modules.block(realId, false)
+      .then(() => resolve({ command: true, result: `Unblocked ${id}` }))
+      .catch(() => reject(new Error(`Could not unblock ${id}`)))
+  }),
   unfollow: (id) => new Promise((resolve, reject) => {
     if (!id) {
       return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.BAD_ARGS })
     }
 
-    return messenger.modules.follow(id, false)
+    const realId = authors.getId(id)
+
+    if (!ref.isFeedId(realId)) {
+      return resolve({ command: true, result: constants.COMMAND_TEXT.FOLLOW.NO_ID })
+    }
+
+    return messenger.modules.follow(realId, false)
       .then(() => resolve({ command: true, result: `Unfollowed ${id}` }))
       .catch(() => reject(new Error(`Could not unfollow ${id}`)))
   }),

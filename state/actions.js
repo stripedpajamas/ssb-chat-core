@@ -62,6 +62,27 @@ const getId = (name) => {
   return authorId || name
 }
 const getAll = () => state.get('authors')
+const getFollowing = () => state.get('following')
+const getFollowingMe = () => state.get('followingMe')
+const getBlocked = () => state.get('blocked') // people i've blocked
+const setBlock = (id, blocked) => {
+  const currentBlocks = getBlocked()
+  const newBlocks = blocked ? currentBlocks.add(id) : currentBlocks.remove(id)
+  state.set('blocked', newBlocks)
+  events.emit('blocked-changed', getBlocked())
+}
+const setFollowing = (id, following) => {
+  const currentFollowing = getFollowing()
+  const newFollowing = following ? currentFollowing.add(id) : currentFollowing.remove(id)
+  state.set('following', newFollowing)
+  events.emit('following-changed', getFollowing())
+}
+const setFollowingMe = (id, following) => {
+  const currentFollowingMe = getFollowingMe()
+  const newFollowingMe = following ? currentFollowingMe.add(id) : currentFollowingMe.remove(id)
+  state.set('followingMe', newFollowingMe)
+  events.emit('following-me-changed', getFollowingMe())
+}
 // #endregion
 
 // #region me actions
@@ -321,7 +342,13 @@ actions = module.exports = {
     getAll,
     setName,
     getName,
-    getId
+    getId,
+    getFollowing,
+    getFollowingMe,
+    getBlocked,
+    setBlock,
+    setFollowing,
+    setFollowingMe,
   },
   me: {
     get: getMe,

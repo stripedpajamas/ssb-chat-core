@@ -2,6 +2,9 @@ const Immutable = require('immutable')
 const constants = require('../util/constants')
 
 module.exports = Immutable.Map({
+  following: Immutable.Set(),
+  blocked: Immutable.Set(),
+  followingMe: Immutable.Set(),
   relevantAuthors: Immutable.Map(),
   unknownRelevantAuthors: Immutable.Set(),
   authors: Immutable.Map(),

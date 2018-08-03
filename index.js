@@ -60,6 +60,13 @@ module.exports = {
         pull.drain(processor)
       )
 
+      // start streaming contacts
+      pull(
+        // don't limit the about messages to a week because we want identifiers
+        server.messagesByType({ type: constants.CONTACT, live: true }),
+        pull.drain(processor)
+      )
+
       // start streaming messages
       pull(
         server.messagesByType({ type: constants.MESSAGE_TYPE, live: true, gt: since }),

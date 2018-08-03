@@ -11,7 +11,8 @@ module.exports = {
   COMMAND_TEXT: {
     INVALID: 'Invalid command',
     FOLLOW: {
-      BAD_ARGS: 'No id specified'
+      BAD_ARGS: 'No id specified',
+      NO_ID: 'Could not determine id for name'
     },
     IDENTIFY: {
       BAD_ARGS: 'Need an id and a name'
