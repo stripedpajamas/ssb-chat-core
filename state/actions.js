@@ -170,6 +170,7 @@ const push = (msg) => {
           if (!actions.storage.hasThisBeenRead(msg)) {
             // then push to unreads on state
             state.set('unreads', currentUnreads.push(unreadRecipients))
+            actions.recents.set(unreadRecipients)
             events.emit('unreads-changed', state.get('unreads'))
           }
         }
