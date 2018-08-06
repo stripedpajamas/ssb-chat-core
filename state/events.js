@@ -18,7 +18,7 @@ const emptyQueue = () => {
 }
 
 setInterval(() => {
-  if (Object.keys(queue).lenth) {
+  if (Object.keys(queue).length) {
     emptyQueue()
   }
 }, 1000)
