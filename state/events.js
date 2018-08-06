@@ -5,7 +5,7 @@ const tick = nanotick()
 const bus = nanobus()
 const emit = tick(bus.emit.bind(bus))
 
-const queue = {}
+let queue = {}
 
 const queueEvent = (e, data) => {
   queue[e] = data
