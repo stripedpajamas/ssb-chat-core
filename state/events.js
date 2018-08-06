@@ -15,6 +15,7 @@ const emptyQueue = () => {
   Object.keys(queue).forEach((e) => {
     emit(e, queue[e])
   })
+  queue = {}
 }
 
 setInterval(() => {
