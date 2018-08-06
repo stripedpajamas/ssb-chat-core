@@ -3,7 +3,7 @@ const nanotick = require('nanotick')
 
 const tick = nanotick()
 const bus = nanobus()
-const emit = tick(bus.emit)
+const emit = tick(bus.emit.bind(bus))
 
 const queue = {}
 
