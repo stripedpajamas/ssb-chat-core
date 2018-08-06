@@ -25,6 +25,7 @@ setInterval(() => {
 }, 1000)
 
 module.exports = {
-  emit: queueEvent,
+  emit,
+  queue: queueEvent,
   on: bus.on.bind(bus)
 }
