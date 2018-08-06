@@ -1,6 +1,7 @@
 dependencies:
   immutable: 3.8.2
   nanobus: 4.3.3
+  nanotick: 1.1.6
   node-persist: 2.1.0
   pull-stream: 3.6.8
   punycode: 2.1.1
@@ -2257,6 +2258,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-jBbrF3qdU9321r8n9X7yu18DjP31Do2ItJm3mWrt90wJTrnDO+HXpoV7ftaUglAtjgj9s+OaCxGufbvx6pvbEQ==
+  /nanotick/1.1.6:
+    dev: false
+    resolution:
+      integrity: sha1-jVgbcG8v15Ij+1ghdGEmS51ktMk=
   /nanotiming/7.3.1:
     dependencies:
       nanoassert: 1.1.0
@@ -4151,6 +4156,7 @@ shrinkwrapVersion: 3
 specifiers:
   immutable: ^3.8.2
   nanobus: ^4.3.3
+  nanotick: ^1.1.6
   node-persist: ^2.1.0
   pull-stream: ^3.6.7
   punycode: ^2.1.1
