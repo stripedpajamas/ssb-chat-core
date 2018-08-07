@@ -294,7 +294,7 @@ const setRecent = (recipients) => {
   events.emit('recents-changed', getRecents())
 }
 const removeRecent = (recipients) => {
-  const key = recipients.toArray().join(',')
+  const key = recipients.join(',')
   storage.recentStorage.removeItemSync(key)
   events.emit('recents-changed', getRecents())
 }
