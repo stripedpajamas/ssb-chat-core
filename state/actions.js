@@ -147,7 +147,7 @@ const push = (msg) => {
           if (!actions.storage.hasThisBeenRead(msg)) {
             // then push to unreads on state
             state.set('unreads', currentUnreads.push(unreadRecipients))
-            actions.recents.set(unreadRecipients.add(myId))
+            actions.recents.set(unreadRecipients.add(myId).sort())
             events.emit('unreads-changed', state.get('unreads'))
           }
         }
@@ -221,7 +221,7 @@ const compare = (a, b) => {
 
 const getPrivateRecipients = () => state.get('privateRecipients')
 const setPrivateRecipients = (recipients) => {
-  const privateRecipients = Immutable.Set(recipients).add(actions.me.get())
+  const privateRecipients = Immutable.Set(recipients).add(actions.me.get()).sort()
 
   actions.unreads.setAsRead(privateRecipients)
   state.set('privateRecipients', privateRecipients)
@@ -251,9 +251,9 @@ const setAsRead = (recps) => {
   // when we create an unread, we leave off our own username
   // so to clear an unread we need to take our own username off the criteria
   const filteredRecps = recps.filter(r => r !== actions.me.get())
-  const newUnreads = getUnreads().filter((unreadRecps) => {
-    return !actions.recipients.compare(filteredRecps, unreadRecps)
-  })
+  const newUnreads = getUnreads().filter((unreadRecps) => (
+    !actions.recipients.compare(filteredRecps, unreadRecps)
+  ))
   state.set('unreads', newUnreads)
   events.emit('unreads-changed', state.get('unreads'))
 }
