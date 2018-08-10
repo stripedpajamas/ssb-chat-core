@@ -38,6 +38,10 @@ const getId = (name) => {
     })
   return authorId || name
 }
+const findMatches = (partial) => getAll()
+  .map(nameMap => nameMap.get('name'))
+  .filter(name => name.startsWith(partial))
+  .toArray()
 const getAll = () => state.get('authors')
 const getFollowing = () => state.get('following')
 const getFollowingMe = () => state.get('followingMe')
@@ -312,6 +316,7 @@ actions = module.exports = {
     setBlock,
     setFollowing,
     setFollowingMe,
+    findMatches
   },
   me: {
     get: getMe,
