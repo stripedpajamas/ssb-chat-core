@@ -132,28 +132,20 @@ const push = (msg) => {
 
     // also if this wasn't sent by us
     if (msg.recipients.size && msg.author !== myId) {
-      // see if we're currently in private mode with the recipients
-      const talkingToThem = actions.recipients.compare(actions.recipients.get(), msg.recipients)
-      const inPrivateMode = actions.mode.isPrivate()
-      // if we aren't in private mode
-      // or we are in private mode but with other people
-      if (!inPrivateMode || !talkingToThem) {
-        // see if these recipients are already in an unread notification
-        let unreadRecipients = Immutable.Set(msg.recipients).delete(myId)
+      // see if these recipients are already in an unread notification
+      let unreadRecipients = Immutable.Set(msg.recipients).delete(myId)
 
-        const currentUnreads = actions.unreads.get()
-        const alreadyNoted = currentUnreads.some(un => actions.recipients.compare(un, unreadRecipients))
+      const currentUnreads = actions.unreads.get()
+      const alreadyNoted = currentUnreads.some(un => actions.recipients.compare(un, unreadRecipients))
 
-        // if we haven't already noted this unread message
-        if (!alreadyNoted) {
-          // and of course confirm that this message isn't already read
-          // based on saved read message keys on disk
-          if (!actions.storage.hasThisBeenRead(msg)) {
-            // then push to unreads on state
-            state.set('unreads', currentUnreads.push(unreadRecipients))
-            actions.recents.set(unreadRecipients.add(myId).sort())
-            events.emit('unreads-changed', state.get('unreads'))
-          }
+      // if we haven't already noted this unread message
+      if (!alreadyNoted) {
+        // and of course confirm that this message isn't already read
+        // based on saved read message keys on disk
+        if (!actions.storage.hasThisBeenRead(msg)) {
+          // then push to unreads on state
+          actions.unreads.add(unreadRecipients)
+          actions.recents.add(unreadRecipients.add(myId).sort())
         }
       }
     }
@@ -231,7 +223,7 @@ const setPrivateRecipients = (recipients) => {
   state.set('privateRecipients', privateRecipients)
 
   // add these recipients to recents storage
-  actions.recents.set(privateRecipients)
+  actions.recents.add(privateRecipients)
 
   actions.mode.setPrivate()
   events.emit('recipients-changed', state.get('privateRecipients'))
@@ -249,6 +241,11 @@ const setSbot = (sbot) => state.set('sbot', sbot)
 // #endregion
 
 // #region unread actions
+const addUnread = (recipients) => {
+  const currentUnreads = actions.unreads.get()
+  state.set('unreads', currentUnreads.push(recipients))
+  events.emit('unreads-changed', state.get('unreads'))
+}
 const getUnreads = () => state.get('unreads')
 const getLastUnread = () => getUnreads().last()
 const setAsRead = (recps) => {
@@ -292,7 +289,7 @@ const getRecents = () => {
   const recents = storage.recentStorage.keys()
   return recents.map(r => r.split(','))
 }
-const setRecent = (recipients) => {
+const addRecent = (recipients) => {
   const key = recipients.toArray().join(',')
   storage.recentStorage.setItemSync(key, true)
   events.emit('recents-changed', getRecents())
@@ -349,6 +346,7 @@ actions = module.exports = {
     set: setSbot
   },
   unreads: {
+    add: addUnread,
     get: getUnreads,
     getLast: getLastUnread,
     setAsRead
@@ -364,7 +362,7 @@ actions = module.exports = {
   },
   recents: {
     get: getRecents,
-    set: setRecent,
+    add: addRecent,
     remove: removeRecent
   }
 }
