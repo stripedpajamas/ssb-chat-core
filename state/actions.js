@@ -304,12 +304,16 @@ const removeRecent = (recipients) => {
 actions = module.exports = {
   authors: {
     get: getAll,
+    getJS: () => getAll().toJS(),
     setName,
     getName,
     getId,
     getFollowing,
     getFollowingMe,
     getBlocked,
+    getFollowingJS: () => getFollowing().toJS(),
+    getFollowingMeJS: () => getFollowingMe().toJS(),
+    getBlockedJS: () => getBlocked().toJS(),
     setBlock,
     setFollowing,
     setFollowingMe,
@@ -319,10 +323,12 @@ actions = module.exports = {
     get: getMe,
     set: setMe,
     names,
+    namesJS: () => names().toJS(),
     addName
   },
   messages: {
     get: getMessages,
+    getJS: () => getMessages().toJS(),
     push,
     refreshFiltered
   },
@@ -334,6 +340,7 @@ actions = module.exports = {
   },
   recipients: {
     get: getPrivateRecipients,
+    getJS: () => getPrivateRecipients().toJS(),
     reset: resetPrivateRecipients,
     set: setPrivateRecipients,
     getNotMe,
@@ -348,11 +355,13 @@ actions = module.exports = {
   unreads: {
     add: addUnread,
     get: getUnreads,
+    getJS: () => getUnreads().toJS(),
     getLast: getLastUnread,
     setAsRead
   },
   options: {
     get: getOptions,
+    getJS: () => getOptions().toJS(),
     set: setOption,
     setOptions
   },
