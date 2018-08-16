@@ -144,7 +144,7 @@ const push = (msg) => {
         // based on saved read message keys on disk
         if (!actions.storage.hasThisBeenRead(msg)) {
           // then push to unreads on state
-          actions.unreads.add(unreadRecipients)
+          actions.unreads.add(unreadRecipients.sort())
           actions.recents.add(unreadRecipients.add(myId).sort())
         }
       }
