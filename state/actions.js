@@ -50,19 +50,19 @@ const setBlock = (id, blocked) => {
   const currentBlocks = getBlocked()
   const newBlocks = blocked ? currentBlocks.add(id) : currentBlocks.remove(id)
   state.set('blocked', newBlocks)
-  events.emit('blocked-changed', getBlocked())
+  events.emit('blocked-changed', getBlocked().toJS())
 }
 const setFollowing = (id, following) => {
   const currentFollowing = getFollowing()
   const newFollowing = following ? currentFollowing.add(id) : currentFollowing.remove(id)
   state.set('following', newFollowing)
-  events.emit('following-changed', getFollowing())
+  events.emit('following-changed', getFollowing().toJS())
 }
 const setFollowingMe = (id, following) => {
   const currentFollowingMe = getFollowingMe()
   const newFollowingMe = following ? currentFollowingMe.add(id) : currentFollowingMe.remove(id)
   state.set('followingMe', newFollowingMe)
-  events.emit('following-me-changed', getFollowingMe())
+  events.emit('following-me-changed', getFollowingMe().toJS())
 }
 // #endregion
 
@@ -76,7 +76,7 @@ const addName = (name) => {
   const oldMyNames = state.get('myNames')
   const newMyNames = oldMyNames.add(name)
   state.set('myNames', newMyNames)
-  events.emit('my-names-changed', state.get('myNames'))
+  events.emit('my-names-changed', state.get('myNames').toJS())
 }
 const names = () => state.get('myNames')
 // #endregion
@@ -114,11 +114,11 @@ const refreshFiltered = () => {
     state.set('filteredMessages', messages.filter(msg => {
       return msg.get('private') && actions.recipients.compare(msg.get('recipients'), actions.recipients.get())
     }))
-    events.emit('messages-changed', getMessages())
+    events.emit('messages-changed', getMessages().toJS())
     return
   }
   state.set('filteredMessages', messages.filter(msg => !msg.get('private')))
-  events.emit('messages-changed', getMessages())
+  events.emit('messages-changed', getMessages().toJS())
 }
 const push = (msg) => {
   addInPlace(msg)
@@ -194,11 +194,11 @@ const resetPrivateRecipients = () => {
   const pr = getPrivateRecipients()
   if (pr.size) {
     state.set('lastPrivateRecipients', getPrivateRecipients())
-    events.emit('last-recipients-changed', state.get('lastPrivateRecipients'))
+    events.emit('last-recipients-changed', state.get('lastPrivateRecipients').toJS())
   }
   state.set('privateRecipients', Immutable.Set())
   state.set('privateMessageRoot', '')
-  events.emit('recipients-changed', state.get('privateRecipients'))
+  events.emit('recipients-changed', state.get('privateRecipients').toJS())
 }
 const compare = (a, b) => {
   if (!Immutable.Set.isSet(a) || !Immutable.Set.isSet(b)) {
@@ -226,7 +226,7 @@ const setPrivateRecipients = (recipients) => {
   actions.recents.add(privateRecipients)
 
   actions.mode.setPrivate()
-  events.emit('recipients-changed', state.get('privateRecipients'))
+  events.emit('recipients-changed', state.get('privateRecipients').toJS())
 }
 const getNotMe = () => getPrivateRecipients()
   .filter(r => r !== actions.me.get())
@@ -244,7 +244,7 @@ const setSbot = (sbot) => state.set('sbot', sbot)
 const addUnread = (recipients) => {
   const currentUnreads = actions.unreads.get()
   state.set('unreads', currentUnreads.push(recipients))
-  events.emit('unreads-changed', state.get('unreads'))
+  events.emit('unreads-changed', state.get('unreads').toJS())
 }
 const getUnreads = () => state.get('unreads')
 const getLastUnread = () => getUnreads().last()
@@ -256,7 +256,7 @@ const setAsRead = (recps) => {
     !actions.recipients.compare(filteredRecps, unreadRecps)
   ))
   state.set('unreads', newUnreads)
-  events.emit('unreads-changed', state.get('unreads'))
+  events.emit('unreads-changed', state.get('unreads').toJS())
 }
 // #endregion
 
@@ -267,7 +267,7 @@ const setOptions = (opts) => {
 }
 const setOption = (key, val) => {
   state.setIn(['options', key], val)
-  events.emit('options-changed', state.get('options'))
+  events.emit('options-changed', state.get('options').toJS())
 }
 // #endregion
 
@@ -292,7 +292,7 @@ const getRecents = () => {
 const addRecent = (recipients) => {
   const key = recipients.toArray().join(',')
   storage.recentStorage.setItemSync(key, true)
-  events.emit('recents-changed', getRecents())
+  events.emit('recents-changed', getRecents()) // recents is not Immutable
 }
 const removeRecent = (recipients) => {
   const key = recipients.join(',')
