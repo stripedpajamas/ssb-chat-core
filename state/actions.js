@@ -24,7 +24,7 @@ const setName = (author, name, setter) => {
 
   state.setIn(['authors', author], { name: cleanName, setter })
 
-  events.queue('authors-changed', getAll())
+  events.queue('authors-changed', getAll().toJS())
 }
 const getName = (id) => {
   const name = state.getIn(['authors', id, 'name'])
