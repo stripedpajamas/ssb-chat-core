@@ -5,7 +5,7 @@ dependencies:
   node-persist: 2.1.0
   pull-stream: 3.6.8
   punycode: 2.1.1
-  scuttlebot: 11.4.2
+  scuttlebot: 11.3.3
   ssb-about: 0.1.2
   ssb-backlinks: 0.7.3
   ssb-blobs: 1.1.5
@@ -15,11 +15,11 @@ dependencies:
   ssb-friends: 2.4.0
   ssb-keys: 7.0.16
   ssb-meme: 1.0.4
-  ssb-names: 3.1.2
+  ssb-names: 3.1.3
   ssb-ooo: 1.0.9
   ssb-private: 0.2.3
-  ssb-query: 2.1.0
-  ssb-ref: 2.11.1
+  ssb-query: 2.2.1
+  ssb-ref: 2.11.2
   ssb-search: 1.1.2
   ssb-ws: 2.1.1
 devDependencies:
@@ -288,7 +288,7 @@ packages:
     dependencies:
       expand-range: 1.8.2
       preserve: 0.2.0
-      repeat-element: 1.1.2
+      repeat-element: 1.1.3
     dev: false
     engines:
       node: '>=0.10.0'
@@ -375,7 +375,7 @@ packages:
     dependencies:
       ansi-styles: 3.2.1
       escape-string-regexp: 1.0.5
-      supports-color: 5.4.0
+      supports-color: 5.5.0
     dev: true
     engines:
       node: '>=4'
@@ -751,13 +751,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-1MkrZNvWTKCaigbn+W15elq2BB/L22nqrSY5DKlo3X6+vclJm8Bb5djXJBmEX6fS3+zCh/F4VBK5Z2KxJt4s2Q==
-  /epidemic-broadcast-trees/6.3.3:
+  /epidemic-broadcast-trees/6.3.4:
     dependencies:
       inherits: 2.0.3
       push-stream: 10.0.3
     dev: false
     resolution:
-      integrity: sha512-yNbiNBGgX69SleCvOeNL9v7DlqtcEeH6FXZOnGCSgsgcJIZQIMwsQ1HB/j7h+yvnYYh/qqX2iFP9fqR0aukuug==
+      integrity: sha512-ucs3AI3ebPCDFGw8B0SUBwzcY2WqKrbJeqYeeX9KF+XvsO7GFEe0L+1hXPfJcEScfGPByXJNACkYwUFnNaOueQ==
   /errno/0.1.7:
     dependencies:
       prr: 1.0.1
@@ -867,7 +867,7 @@ packages:
       ignore: 3.3.10
       minimatch: 3.0.4
       resolve: 1.8.1
-      semver: 5.5.0
+      semver: 5.5.1
     dev: true
     engines:
       node: '>=4'
@@ -955,7 +955,7 @@ packages:
       pluralize: 7.0.0
       progress: 2.0.0
       require-uncached: 1.0.3
-      semver: 5.5.0
+      semver: 5.5.1
       strip-ansi: 4.0.0
       strip-json-comments: 2.0.1
       table: 4.0.2
@@ -1110,7 +1110,7 @@ packages:
       is-number: 2.1.0
       isobject: 2.1.0
       randomatic: 3.1.0
-      repeat-element: 1.1.2
+      repeat-element: 1.1.3
       repeat-string: 1.6.1
     dev: false
     engines:
@@ -2181,18 +2181,18 @@ packages:
     dev: false
     resolution:
       integrity: sha512-PZM4dhYFmCF6uZGWpEmoPMUqJBywS9IcAgybT2GmSpYI1BvGvoWSdbio+ik+q/YD2vodhvslESWIS3NnkKYdqQ==
-  /multiserver/1.12.0:
+  /multiserver/1.13.2:
     dependencies:
       pull-cat: 1.1.11
       pull-stream: 3.6.8
       pull-ws: 3.3.1
       secret-handshake: 1.1.13
       separator-escape: 0.0.0
-      socks: 1.1.9
+      socks: 2.2.1
       stream-to-pull-stream: 1.7.2
     dev: false
     resolution:
-      integrity: sha512-vyoVDqxiJabvepIKYN2+lYcPDcV5/de54kWXg1nYa1VK0NMJZ+gVIS6bLnQ9FmNzOxpCmVrVOkaQ0pMlMic5Ow==
+      integrity: sha512-vAV/2A1OsvydbDYCOpf77vxVT7wNzhZMW1IhXhXBK3hN0q/QsxQqyQCt0w66DSNPT6IREZlHzh7N5gODWZZukg==
   /mute-stream/0.0.7:
     dev: true
     resolution:
@@ -2204,7 +2204,7 @@ packages:
     dev: false
     resolution:
       integrity: sha1-zWUNFyAl/p0GQjCqs4ymMo3Rby8=
-  /muxrpc/6.4.0:
+  /muxrpc/6.4.1:
     dependencies:
       explain-error: 1.0.4
       packet-stream: 2.0.4
@@ -2213,7 +2213,7 @@ packages:
       pull-stream: 3.6.8
     dev: false
     resolution:
-      integrity: sha1-JPfaBpvUYpsHfpk7BXeUKyaI6ug=
+      integrity: sha512-r8+tucKMmQiYd8NWGQqAA5r+SlYuU30D/WbYo7E/PztG/jmizQJY5NfmLIJ+GWo+dEC6kIxkr0eY+U0uZexTNg==
   /muxrpcli/1.1.0:
     dependencies:
       minimist: 1.2.0
@@ -2276,7 +2276,7 @@ packages:
       integrity: sha1-GVoh1sRuNh0vsSgbo4uR6d9727M=
   /node-abi/2.4.3:
     dependencies:
-      semver: 5.5.0
+      semver: 5.5.1
     dev: false
     resolution:
       integrity: sha512-b656V5C0628gOOA2kwcpNA/bxdlqYF9FvxJ+qqVX0ctdXNVZpS8J6xEUYir3WAKc7U0BH/NRlSpNbGsy+azjeg==
@@ -2309,7 +2309,7 @@ packages:
     dependencies:
       hosted-git-info: 2.7.1
       is-builtin-module: 1.0.0
-      semver: 5.5.0
+      semver: 5.5.1
       validate-npm-package-license: 3.0.4
     dev: true
     resolution:
@@ -3129,12 +3129,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-wkvOKig62tW8P1jg1IJJuSN52O8=
-  /repeat-element/1.1.2:
+  /repeat-element/1.1.3:
     dev: false
     engines:
       node: '>=0.10.0'
     resolution:
-      integrity: sha1-7wiaF40Ug7quTZPrmLT55OEdmQo=
+      integrity: sha512-ahGq0ZnV5m5XtZLMb+vP76kcAM5nkLqk0lpqAuojSKGgQtn4eRi4ZZGm2olo2zKFH+sMsWaqOCW1dqAnOru72g==
   /repeat-string/1.6.1:
     dev: false
     engines:
@@ -3239,7 +3239,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
-  /scuttlebot/11.4.2:
+  /scuttlebot/11.3.3:
     dependencies:
       atomic-file: 0.0.1
       bash-color: 0.0.4
@@ -3255,8 +3255,8 @@ packages:
       mkdirp: 0.5.1
       multiblob: 1.13.0
       multicb: 1.2.2
-      multiserver: 1.12.0
-      muxrpc: 6.4.0
+      multiserver: 1.13.2
+      muxrpc: 6.4.1
       muxrpc-validation: 2.0.1
       muxrpcli: 1.1.0
       mv: 2.1.1
@@ -3292,8 +3292,8 @@ packages:
       ssb-keys: 7.0.16
       ssb-links: 3.0.3
       ssb-msgs: 5.2.0
-      ssb-query: 2.1.0
-      ssb-ref: 2.11.1
+      ssb-query: 2.2.1
+      ssb-ref: 2.11.2
       ssb-ws: 2.1.1
       statistics: 3.3.0
       stream-to-pull-stream: 1.7.2
@@ -3301,7 +3301,7 @@ packages:
     dev: false
     hasBin: true
     resolution:
-      integrity: sha512-JbOKdMFCyoALwpiK5FM8qikpFvEqCdRycbFGiOdhhQT0VrTWCO1PXDFuDAHnCBTDYvjjO88M9njq2BOXVypvAg==
+      integrity: sha512-1F2PVf1HfU3dbCwa5AxKbXEmMEhz0vlsetc5HoBkAr+L4U3SR9NaO+oPNa9NuUc9lVM1wqCrLjDU2nu824bGvQ==
   /secret-handshake/1.1.13:
     dependencies:
       chloride: 2.2.10
@@ -3317,8 +3317,8 @@ packages:
       hoox: 0.0.1
       ip: 1.1.5
       map-merge: 1.1.0
-      multiserver: 1.12.0
-      muxrpc: 6.4.0
+      multiserver: 1.13.2
+      muxrpc: 6.4.1
       non-private-ip: 1.4.4
       pull-inactivity: 2.1.2
       pull-rate: 1.0.2
@@ -3352,7 +3352,7 @@ packages:
       pull-stream: 3.6.8
       ssb-keys: 7.0.16
       ssb-msgs: 5.2.0
-      ssb-ref: 2.11.1
+      ssb-ref: 2.11.2
       ssb-validate: 3.0.10
       typewiselite: 1.0.0
     dev: false
@@ -3363,10 +3363,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-oykqNz5vPgeY2gsgZBuanFvEfhk=
-  /semver/5.5.0:
+  /semver/5.5.1:
     hasBin: true
     resolution:
-      integrity: sha512-4SJ3dm0WAwWy/NVeioZh5AntkdJoWKxHxcmyP622fOkgHa4z3R0TdBJICINyaSDE6uNwVc8gZr+ZinwZAH4xIA==
+      integrity: sha512-PqpAxfrEhlSUWge8dwIp4tZnQ25DIOthpiaHNIthsjEFQD6EvqUKUDM7L8O2rShkFccYo1VjJR0coWfNkCubRw==
   /separator-escape/0.0.0:
     dev: false
     resolution:
@@ -3435,24 +3435,23 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-POqxBK6Lb3q6s047D/XsDVNPnF9Dl8JSaqe9h9lURl0OdNqy/ujDrOiIHtsqXMGbWWTIomRzAMaTyawAU//Reg==
-  /smart-buffer/1.1.15:
+  /smart-buffer/4.0.1:
     dev: false
     engines:
-      node: '>= 0.10.15'
-      npm: '>= 1.3.5'
+      node: '>= 4.0.0'
+      npm: '>= 3.0.0'
     resolution:
-      integrity: sha1-fxFLW2X6s+KjWqd1uxLw0cZJvxY=
-  /socks/1.1.9:
+      integrity: sha512-RFqinRVJVcCAL9Uh1oVqE6FZkqsyLiVOYEZ20TqIOjuX7iFVJ+zsbs4RIghnw/pTs7mZvt8ZHhvm1ZUrR4fykg==
+  /socks/2.2.1:
     dependencies:
       ip: 1.1.5
-      smart-buffer: 1.1.15
-    deprecated: 'If using 2.x branch, please upgrade to at least 2.1.6 to avoid a serious bug with socket data flow and an import issue introduced in 2.1.0'
+      smart-buffer: 4.0.1
     dev: false
     engines:
-      node: '>= 0.10.0'
-      npm: '>= 1.3.5'
+      node: '>= 6.0.0'
+      npm: '>= 3.0.0'
     resolution:
-      integrity: sha1-Yo1+TQSRJDVEWsC25Fk3bLPm1pE=
+      integrity: sha512-0GabKw7n9mI46vcNrVfs0o6XzWzjVa3h6GaSo2UPxtWAROXUWavfJWh1M4PR5tnE0dcnQXZIDFP4yrAysLze/w==
   /sodium-browserify-tweetnacl/0.2.3:
     dependencies:
       chloride-test: 1.2.2
@@ -3551,8 +3550,8 @@ packages:
     dependencies:
       explain-error: 1.0.4
       multicb: 1.2.2
-      multiserver: 1.12.0
-      muxrpc: 6.4.0
+      multiserver: 1.13.2
+      muxrpc: 6.4.1
       pull-hash: 1.0.0
       pull-stream: 3.6.8
       ssb-config: 2.2.0
@@ -3572,11 +3571,11 @@ packages:
   /ssb-ebt/5.2.2:
     dependencies:
       base64-url: 2.2.0
-      epidemic-broadcast-trees: 6.3.3
+      epidemic-broadcast-trees: 6.3.4
       lossy-store: 1.2.3
       pull-stream: 3.6.8
       push-stream-to-pull-stream: 1.0.1
-      ssb-ref: 2.11.1
+      ssb-ref: 2.11.2
     dev: false
     resolution:
       integrity: sha512-De3dUnmgs/8aYl2fmi/MtJljR9qw1mUmpdM4qeCf+4uniqlNNhfn1Ux+M5A8XYVuI+TD4GkgmIDeZH6miey2kw==
@@ -3588,7 +3587,7 @@ packages:
       pull-cont: 0.1.1
       pull-flatmap: 0.0.1
       pull-stream: 3.6.8
-      ssb-ref: 2.11.1
+      ssb-ref: 2.11.2
     dev: false
     resolution:
       integrity: sha1-DUDNlqEvIznJBkqK0dWnE+kcV64=
@@ -3619,11 +3618,11 @@ packages:
       integrity: sha512-r4JAfdCY7tnRzMQNETdWfcm54FOe6bJMbpanp+9dQA76daLu1Jg3EijQ4jNtnDtv1WDMq1XcDTQyEtzVICrKBg==
   /ssb-msgs/5.2.0:
     dependencies:
-      ssb-ref: 2.11.1
+      ssb-ref: 2.11.2
     dev: false
     resolution:
       integrity: sha1-xoHaXNcMV0ySLcpPA8UhU4E1wkM=
-  /ssb-names/3.1.2:
+  /ssb-names/3.1.3:
     dependencies:
       flumeview-reduce: 1.3.13
       graphreduce: 3.0.4
@@ -3631,7 +3630,7 @@ packages:
       ssb-ref: 2.11.1
     dev: false
     resolution:
-      integrity: sha512-W7ELI/taHGEGPuQ94jIc9xacz37p88XxUvw/7+dZC9emeB3AMm+4Q0Ct4lE2yFQrVd7DONqEpsS/5kxt0kpXkQ==
+      integrity: sha512-6VNuatPnWuZWvz2axty97e7EqqZQddFMbMd2E5FpFfVWZi8hzCtvxsDc5f/4kqgSWsr4bgbJ1Ffm2shSc0hkDA==
   /ssb-ooo/1.0.9:
     dependencies:
       flumecodec: 0.0.1
@@ -3642,7 +3641,7 @@ packages:
       mkdirp: 0.5.1
       pull-stream: 3.6.8
       ssb-keys: 7.0.16
-      ssb-ref: 2.11.1
+      ssb-ref: 2.11.2
     dev: false
     resolution:
       integrity: sha1-Lz2Z+FuNx6OEHp/0CgsKmz/nYGQ=
@@ -3656,14 +3655,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-SiLBKOB1hxkrohzOrRWURlzj6HvPFvr9LLd5P5I5C5KU/RtaWe79nYuFgjUFJFnjWw7X4szCy32/EZMihV1l/Q==
-  /ssb-query/2.1.0:
+  /ssb-query/2.2.1:
     dependencies:
       explain-error: 1.0.4
-      flumeview-query: 6.3.0
+      flumeview-query: github.com/mmckegg/flumeview-query/59afdf210dbd8bdf53aeea7dcfaaec1c77e7d733
       pull-stream: 3.6.8
     dev: false
     resolution:
-      integrity: sha512-4QWvjSrSIon9qyhPHrqOeA/dp6NR7b11BtXKhJg/Di2r7/nBLGAj2RzUonfTfs3LlPHZdFWXowhhJREUAmUZug==
+      integrity: sha512-eAbTVPHYLJ/Cp8jO7uFFXY7L3RhYKlGIhTEM1xjbz3p4/Dysl6DPyWTz7JF+lXhz5AznfjzZNfZjMnX3GJtIbA==
   /ssb-ref/2.11.1:
     dependencies:
       ip: 1.1.5
@@ -3671,6 +3670,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-K3L9hJ1v0HrH8abtEKiBkdeabHVaws+CS81mZqUfhR84i0dlYhiIIDwqeLxUj/1mLcsZPF3gMKPsFCUr7UAdMA==
+  /ssb-ref/2.11.2:
+    dependencies:
+      ip: 1.1.5
+      is-valid-domain: 0.0.5
+    dev: false
+    resolution:
+      integrity: sha512-40A+o3iNAgr/sMH4V6/f3l2dhzUb5ZhTwZdrlKFu1ti+uZrKNUkH/E8j5NIZpj2rDq0PDXkACSVJgPGwltfQRA==
   /ssb-search/1.1.2:
     dependencies:
       flumeview-search: 1.0.4
@@ -3682,7 +3688,7 @@ packages:
       integrity: sha512-k7CCfdugGYvNMZekGJXcCYuCdf7MEP+bBZr+AsZO5KqaNb4K9CuP6W1wGoKH6vkparhaCKc85jO46EbWsEoVDQ==
   /ssb-validate/3.0.10:
     dependencies:
-      ssb-ref: 2.11.1
+      ssb-ref: 2.11.2
     dev: false
     resolution:
       integrity: sha512-9wJE1i+4vW/F/TYQQl15BVoiZb9kaqIRBhl2I/TXyhjngfx/yBzXFAuiXhaiDfqJ3YnUXzY4JMUSx0gIvpePnQ==
@@ -3690,10 +3696,10 @@ packages:
     dependencies:
       emoji-server: 1.0.0
       multiblob-http: 0.4.2
-      multiserver: 1.12.0
-      muxrpc: 6.4.0
+      multiserver: 1.13.2
+      muxrpc: 6.4.1
       pull-box-stream: 1.0.13
-      ssb-ref: 2.11.1
+      ssb-ref: 2.11.2
       stack: 0.1.0
     dev: false
     resolution:
@@ -3824,14 +3830,14 @@ packages:
       node: '>=0.8.0'
     resolution:
       integrity: sha1-U10EXOa2Nj+kARcIRimZXp3zJMc=
-  /supports-color/5.4.0:
+  /supports-color/5.5.0:
     dependencies:
       has-flag: 3.0.0
     dev: true
     engines:
       node: '>=4'
     resolution:
-      integrity: sha512-zjaXglF5nnWpsq470jSv6P9DwPvgLkuapYmfDm3JWOm0vkNTVF2tI4UrN2r6jH1qM/uc/WtxYY1hYoA2dOKj5w==
+      integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==
   /table/4.0.2:
     dependencies:
       ajv: 5.5.2
@@ -4146,6 +4152,20 @@ packages:
     dev: false
     resolution:
       integrity: sha1-YoFN15nv+DYfKiKPQfcFxeGd5Mk=
+  github.com/mmckegg/flumeview-query/59afdf210dbd8bdf53aeea7dcfaaec1c77e7d733:
+    dependencies:
+      deep-equal: 1.0.1
+      flumeview-level: 3.0.5
+      map-filter-reduce: 3.1.0
+      pull-flatmap: 0.0.1
+      pull-paramap: 1.2.2
+      pull-sink-through: 0.0.0
+      pull-stream: 3.6.8
+    dev: false
+    name: flumeview-query
+    resolution:
+      tarball: 'https://codeload.github.com/mmckegg/flumeview-query/tar.gz/59afdf210dbd8bdf53aeea7dcfaaec1c77e7d733'
+    version: 6.2.0
 registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 8
 shrinkwrapVersion: 3
@@ -4156,7 +4176,7 @@ specifiers:
   node-persist: ^2.1.0
   pull-stream: ^3.6.7
   punycode: ^2.1.1
-  scuttlebot: ^11.3.3
+  scuttlebot: ~11.3.3
   ssb-about: ^0.1.2
   ssb-backlinks: ^0.7.2
   ssb-blobs: ^1.1.5
