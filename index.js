@@ -28,6 +28,7 @@ module.exports = {
   options: actions.options,
   recents: actions.recents,
   start: (opts, cb) => {
+    console.log('hello world')
     if (started) {
       // don't double start, thanks @korlando7
       cb()
@@ -54,18 +55,18 @@ module.exports = {
       actions.me.set(server.id)
 
       // start streaming abouts
-      pull(
-        // don't limit the about messages to a week because we want identifiers
-        server.messagesByType({ type: constants.ABOUT, live: true }),
-        pull.drain(processor)
-      )
+      // pull(
+      //   // don't limit the about messages to a week because we want identifiers
+      //   server.messagesByType({ type: constants.ABOUT, live: true }),
+      //   pull.drain(processor)
+      // )
 
-      // start streaming contacts
-      pull(
-        // don't limit the about messages to a week because we want identifiers
-        server.messagesByType({ type: constants.CONTACT, live: true }),
-        pull.drain(processor)
-      )
+      // // start streaming contacts
+      // pull(
+      //   // don't limit the about messages to a week because we want identifiers
+      //   server.messagesByType({ type: constants.CONTACT, live: true }),
+      //   pull.drain(processor)
+      // )
 
       // start streaming messages
       pull(

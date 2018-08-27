@@ -8,62 +8,84 @@ const constants = require('../util/constants')
 let actions
 
 // #region author actions
-const setName = (author, name, setter) => {
-  if (typeof name !== 'string') {
+const setName = (id) => {
+  const sbot = state.get('sbot')
+  const me = state.get('me')
+  sbot.about.get((err, authors) => {
+    if (err) {
+      console.log(err)
+      return
+    }
+    const names = (authors[id] || {}).name
+    const latestFromSelf = { value: id, timestamp: 0 }
+    const latestFromMe = { value: id, timestamp: 0 }
+    Object.keys(names).forEach((user) => {
+      // figure out the latest self-identification
+      // or the latest identification by `me`
+      if (user === id) {
+        if (names[user][1] > latestFromSelf.timestamp) {
+          latestFromSelf.value = names[user][0]
+          latestFromSelf.timestamp = names[user][1]
+        }
+      }
+      if (user === me) {
+        if (names[user][1] > latestFromMe.timestamp) {
+          latestFromMe.value = names[user][0]
+          latestFromMe.timestamp = names[user][1]
+        }
+      }
+    })
+    // if we have something other than the id set by `me` return it
+    // otherwise return the latest self identification
+    // otherwise return the original id
+    if (latestFromMe.value !== id) {
+      state.setIn(['authors', id], latestFromMe.value)
+      events.queue('authors-changed', getAll().toJS())
+      return
+    }
+    state.setIn(['authors', id], latestFromSelf.value)
+    events.queue('authors-changed', getAll().toJS())
     return
-  }
-  let cleanName = punycode.toASCII(name.normalize('NFC')) // :eyeroll: dangerous beans
-  if (cleanName[0] !== '@') {
-    cleanName = `@${cleanName}`
-  }
-
-  // if this is about me, add it to my list of self ids
-  if (author === actions.me.get()) {
-    actions.me.addName(cleanName)
-  }
-
-  state.setIn(['authors', author], { name: cleanName, setter })
-
-  events.queue('authors-changed', getAll()) // this is too big to JS every time
+  })
 }
 const getName = (id) => {
-  const name = state.getIn(['authors', id, 'name'])
+  const name = state.getIn(['authors', id])
+  if (!name || name === id) {
+    // if we don't have a name for the requested id
+    // try to get it from sbot (and cache it for later)
+    setName(id)
+  }
   return name || id
 }
 const getId = (name) => {
   const authorId = state.get('authors')
-    .findKey(author => {
-      const authorName = author.get('name')
-      return authorName === name || authorName === `@${name}`
-    })
+    .findKey(author => author === name || author === `@${name}`)
   return authorId || name
 }
 const findMatches = (partial) => getAll()
-  .map(nameMap => nameMap.get('name'))
   .filter(name => name.startsWith(partial))
   .toArray()
 const getAll = () => state.get('authors')
-const getFollowing = () => state.get('following')
-const getFollowingMe = () => state.get('followingMe')
-const getBlocked = () => state.get('blocked') // people i've blocked
-const setBlock = (id, blocked) => {
-  const currentBlocks = getBlocked()
-  const newBlocks = blocked ? currentBlocks.add(id) : currentBlocks.remove(id)
-  state.set('blocked', newBlocks)
-  events.emit('blocked-changed', getBlocked().toJS())
-}
-const setFollowing = (id, following) => {
-  const currentFollowing = getFollowing()
-  const newFollowing = following ? currentFollowing.add(id) : currentFollowing.remove(id)
-  state.set('following', newFollowing)
-  events.emit('following-changed', getFollowing().toJS())
-}
-const setFollowingMe = (id, following) => {
-  const currentFollowingMe = getFollowingMe()
-  const newFollowingMe = following ? currentFollowingMe.add(id) : currentFollowingMe.remove(id)
-  state.set('followingMe', newFollowingMe)
-  events.emit('following-me-changed', getFollowingMe().toJS())
-}
+const getIsFollowing = (source, destination) => new Promise((resolve, reject) => {
+  state.get('sbot')
+    .friends.isFollowing({ source, destination }, (err, isFollowing) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(isFollowing)
+  })
+})
+const getIsBlocking = (source, destination) => new Promise((resolve, reject) => {
+  state.get('sbot')
+    .friends.isBlocking({ source, destination }, (err, isFollowing) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(isFollowing)
+  })
+})
 // #endregion
 
 // #region me actions
@@ -71,12 +93,19 @@ const getMe = () => state.get('me')
 const setMe = (me) => {
   state.set('me', me)
   events.emit('me-changed', state.get('me'))
-}
-const addName = (name) => {
-  const oldMyNames = state.get('myNames')
-  const newMyNames = oldMyNames.add(name)
-  state.set('myNames', newMyNames)
-  events.emit('my-names-changed', state.get('myNames').toJS())
+
+  // also get my names and add them to state
+  state.get('sbot').about.get((err, authors) => {
+    if (err) {
+      return
+    }
+    const myNames = new Set()
+    Object.keys(authors[me].name).forEach((setter) => {
+      myNames.add(authors[me].name[setter][0])
+    })
+    state.set('myNames', [...myNames])
+    events.emit('my-names-changed', [...myNames])
+  })
 }
 const names = () => state.get('myNames')
 // #endregion
@@ -308,23 +337,15 @@ actions = module.exports = {
     setName,
     getName,
     getId,
-    getFollowing,
-    getFollowingMe,
-    getBlocked,
-    getFollowingJS: () => getFollowing().toJS(),
-    getFollowingMeJS: () => getFollowingMe().toJS(),
-    getBlockedJS: () => getBlocked().toJS(),
-    setBlock,
-    setFollowing,
-    setFollowingMe,
-    findMatches
+    findMatches,
+    isFollowing: getIsFollowing,
+    isBlocking: getIsBlocking
   },
   me: {
     get: getMe,
     set: setMe,
     names,
     namesJS: () => names().toJS(),
-    addName
   },
   messages: {
     get: getMessages,

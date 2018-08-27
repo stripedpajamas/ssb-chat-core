@@ -26,14 +26,6 @@ const processor = (msg) => {
         .catch(() => {}) // ignore failure to decrypt private messages
     }
     switch (m.content.type) {
-      case constants.ABOUT:
-        if (m.content.about && m.content.name) {
-          // only honor self-identification or my own identification of someone else
-          if (m.author === m.content.about || m.author === me) {
-            authors.setName(m.content.about, m.content.name, m.author)
-          }
-        }
-        break
       case constants.CONTACT:
         if (m.author === me) { // i did something
           if (typeof m.content.following !== 'undefined') {
