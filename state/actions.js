@@ -40,11 +40,11 @@ const setName = (id) => {
     // otherwise return the original id
     if (latestFromMe.value !== id) {
       state.setIn(['authors', id], latestFromMe.value)
-      events.queue('authors-changed', getAll().toJS())
+      events.emit('authors-changed', getAll().toJS())
       return
     }
     state.setIn(['authors', id], latestFromSelf.value)
-    events.queue('authors-changed', getAll().toJS())
+    events.emit('authors-changed', getAll().toJS())
     return
   })
 }
