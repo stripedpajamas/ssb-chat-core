@@ -66,26 +66,29 @@ const findMatches = (partial) => getAll()
   .filter(name => name.startsWith(partial))
   .toArray()
 const getAll = () => state.get('authors')
-const getIsFollowing = (source, destination) => new Promise((resolve, reject) => {
-  state.get('sbot')
-    .friends.isFollowing({ source, destination }, (err, isFollowing) => {
-      if (err) {
-        reject(err)
-        return
+const updateFriends = () => {
+  const me = state.get('me')
+  const sbot = state.get('sbot')
+
+  sbot.friends.get({ source: me }, (err, data) => {
+    if (err) {
+      console.log(err)
+      return
+    }
+    const following = new Set()
+    const blocking = new Set()
+    Object.keys(data).forEach((id) => {
+      if (data[id]) {
+        following.add(id)
+      } else if (!data[id] && data[id] !== null) {
+        blocking.add(id)
       }
-      resolve(isFollowing)
+    })
+    state.set('friends', { following: [...following], blocking: [...blocking] })
+    events.emit('friends-changed', state.get('friends').toJS())
   })
-})
-const getIsBlocking = (source, destination) => new Promise((resolve, reject) => {
-  state.get('sbot')
-    .friends.isBlocking({ source, destination }, (err, isFollowing) => {
-      if (err) {
-        reject(err)
-        return
-      }
-      resolve(isFollowing)
-  })
-})
+}
+const getFriends = () => state.get('friends')
 // #endregion
 
 // #region me actions
@@ -338,8 +341,9 @@ actions = module.exports = {
     getName,
     getId,
     findMatches,
-    isFollowing: getIsFollowing,
-    isBlocking: getIsBlocking
+    updateFriends,
+    getFriends,
+    getFriendsJS: () => getFriends().toJS()
   },
   me: {
     get: getMe,

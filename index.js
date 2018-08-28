@@ -52,6 +52,7 @@ module.exports = {
       // set our sbot instance and our self
       actions.sbot.set(server)
       actions.me.set(server.id)
+      actions.authors.updateFriends()
 
       // start streaming messages
       pull(

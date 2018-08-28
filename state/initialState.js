@@ -2,10 +2,8 @@ const Immutable = require('immutable')
 const constants = require('../util/constants')
 
 module.exports = Immutable.Map({
-  following: Immutable.Set(),
-  blocked: Immutable.Set(),
-  followingMe: Immutable.Set(),
   authors: Immutable.Map(),
+  friends: Immutable.Map(),
   options: Immutable.Map({ debug: false, timeWindow: constants.TIME_WINDOW }),
   filteredMessages: Immutable.List(),
   lastPrivateRecipient: Immutable.Set(),

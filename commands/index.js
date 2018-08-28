@@ -25,7 +25,11 @@ module.exports = {
     }
 
     return messenger.modules.block(realId, true)
-      .then(() => resolve({ command: true, result: `Blocked ${id}` }))
+      .then(() => {
+        // update friends now that this has happened
+        authors.updateFriends()
+        resolve({ command: true, result: `Blocked ${id}` })
+      })
       .catch(() => reject(new Error(`Could not block ${id}`)))
   }),
   follow: (id) => new Promise((resolve, reject) => {
@@ -40,7 +44,11 @@ module.exports = {
     }
 
     return messenger.modules.follow(realId, true)
-      .then(() => resolve({ command: true, result: `Followed ${id}` }))
+      .then(() => {
+        // update friends now that this has happened
+        authors.updateFriends()
+        resolve({ command: true, result: `Followed ${id}` })
+      })
       .catch(() => reject(new Error(`Could not follow ${id}`)))
   }),
   identify: (id, name) => new Promise((resolve, reject) => {
@@ -49,7 +57,11 @@ module.exports = {
     }
 
     return messenger.modules.about(name, id)
-      .then(() => resolve({ command: true, result: constants.COMMAND_TEXT.NAME.SUCCESS }))
+      .then(() => {
+        // if i identified someone, update their name in state
+        authors.setName(id)
+        resolve({ command: true, result: constants.COMMAND_TEXT.NAME.SUCCESS })
+      })
       .catch(() => reject(new Error(constants.COMMAND_TEXT.NAME.FAILURE)))
   }),
   me: (status) => new Promise((resolve, reject) => {
@@ -64,7 +76,11 @@ module.exports = {
     }
 
     return messenger.modules.about(name)
-      .then(() => resolve({ command: true, result: constants.COMMAND_TEXT.NAME.SUCCESS }))
+      .then(() => {
+        // if i renamed myself, update my name in state
+        authors.setName(actions.me.get())
+        resolve({ command: true, result: constants.COMMAND_TEXT.NAME.SUCCESS })
+      })
       .catch(() => reject(new Error(constants.COMMAND_TEXT.NAME.FAILURE)))
   }),
   unreads: () => new Promise((resolve, reject) => {
@@ -124,7 +140,11 @@ module.exports = {
     }
 
     return messenger.modules.block(realId, false)
-      .then(() => resolve({ command: true, result: `Unblocked ${id}` }))
+      .then(() => {
+        // update friends now that this has happened
+        authors.updateFriends()
+        resolve({ command: true, result: `Unblocked ${id}` })
+      })
       .catch(() => reject(new Error(`Could not unblock ${id}`)))
   }),
   unfollow: (id) => new Promise((resolve, reject) => {
@@ -139,7 +159,11 @@ module.exports = {
     }
 
     return messenger.modules.follow(realId, false)
-      .then(() => resolve({ command: true, result: `Unfollowed ${id}` }))
+      .then(() => {
+        // update friends now that this has happened
+        authors.updateFriends()
+        resolve({ command: true, result: `Unfollowed ${id}` })
+      })
       .catch(() => reject(new Error(`Could not unfollow ${id}`)))
   }),
   whoami: () => new Promise((resolve, reject) => {
