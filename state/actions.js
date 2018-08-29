@@ -8,44 +8,52 @@ const constants = require('../util/constants')
 let actions
 
 // #region author actions
+const setGoodName = (id, authors) => {
+  const me = state.get('me')
+  const names = (authors[id] || {}).name
+  const latestFromSelf = { value: id, timestamp: 0 }
+  const latestFromMe = { value: id, timestamp: 0 }
+  Object.keys(names).forEach((user) => {
+    // figure out the latest self-identification
+    // or the latest identification by `me`
+    if (user === id) {
+      if (names[user][1] > latestFromSelf.timestamp) {
+        latestFromSelf.value = names[user][0]
+        latestFromSelf.timestamp = names[user][1]
+      }
+    }
+    if (user === me) {
+      if (names[user][1] > latestFromMe.timestamp) {
+        latestFromMe.value = names[user][0]
+        latestFromMe.timestamp = names[user][1]
+      }
+    }
+  })
+  // if we have something other than the id set by `me` return it
+  // otherwise return the latest self identification
+  // otherwise return the original id
+  if (latestFromMe.value !== id) {
+    state.setIn(['authors', id], latestFromMe.value)
+    return
+  }
+  state.setIn(['authors', id], latestFromSelf.value)
+  return
+}
 const setName = (id) => {
   const sbot = state.get('sbot')
-  const me = state.get('me')
   sbot.about.get((err, authors) => {
     if (err) {
       console.log(err)
       return
     }
-    const names = (authors[id] || {}).name
-    const latestFromSelf = { value: id, timestamp: 0 }
-    const latestFromMe = { value: id, timestamp: 0 }
-    Object.keys(names).forEach((user) => {
-      // figure out the latest self-identification
-      // or the latest identification by `me`
-      if (user === id) {
-        if (names[user][1] > latestFromSelf.timestamp) {
-          latestFromSelf.value = names[user][0]
-          latestFromSelf.timestamp = names[user][1]
-        }
-      }
-      if (user === me) {
-        if (names[user][1] > latestFromMe.timestamp) {
-          latestFromMe.value = names[user][0]
-          latestFromMe.timestamp = names[user][1]
-        }
-      }
-    })
-    // if we have something other than the id set by `me` return it
-    // otherwise return the latest self identification
-    // otherwise return the original id
-    if (latestFromMe.value !== id) {
-      state.setIn(['authors', id], latestFromMe.value)
-      events.emit('authors-changed', getAll().toJS())
-      return
+    let input
+    if (Array.isArray(id)) {
+      input = id
+    } else {
+      input = [id]
     }
-    state.setIn(['authors', id], latestFromSelf.value)
+    input.forEach(i => setGoodName(i, authors))
     events.emit('authors-changed', getAll().toJS())
-    return
   })
 }
 const getName = (id) => {
@@ -56,6 +64,16 @@ const getName = (id) => {
     setName(id)
   }
   return name || id
+}
+const bulkNames = (ids) => {
+  const pending = new Set()
+  ids.forEach((id) => {
+    const name = state.getIn(['authors', id])
+    if (!name || name === id) {
+      pending.add(id)
+    }
+  })
+  setName([...pending])
 }
 const getId = (name) => {
   const authorId = state.get('authors')
@@ -86,6 +104,9 @@ const updateFriends = () => {
     })
     state.set('friends', { following: [...following], blocking: [...blocking] })
     events.emit('friends-changed', state.get('friends').toJS())
+
+    // also grab the names of these contacts for searching later
+    bulkNames([...following, ...blocking])
   })
 }
 const getFriends = () => state.get('friends')
