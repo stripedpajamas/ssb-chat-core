@@ -69,8 +69,8 @@ test('authors: setName', (t) => {
   actions.authors.setName(id)
 
   let correctCalledWith = actions.authors.setGoodName.calledWith(id, fakeAuthors)
-  t.truthy(correctCalledWith)
-  t.truthy(listenerStub.calledOnce)
+  t.true(correctCalledWith)
+  t.true(listenerStub.calledOnce)
 
   actions.authors.setGoodName.resetHistory()
   listenerStub.resetHistory()
@@ -90,8 +90,8 @@ test('authors: setName', (t) => {
   .secondCall
   .calledWith(ids[1], fakeAuthors)
 
-  t.truthy(correctCalledWith)
-  t.truthy(listenerStub.calledOnce) // one event even for multiple updates
+  t.true(correctCalledWith)
+  t.true(listenerStub.calledOnce) // one event even for multiple updates
 
   setGoodNameStub.restore()
 })
@@ -113,7 +113,7 @@ test('authors: getName', (t) => {
   name = actions.authors.getName('you123')
   t.is(name, 'you123') // returns id
   // confirm that it called setName to get what it was missing
-  t.truthy(actions.authors.setName.calledWith('you123'))
+  t.true(actions.authors.setName.calledWith('you123'))
   setNameStub.restore()
 })
 
@@ -128,7 +128,7 @@ test('authors: bulkNames', (t) => {
   // we have one of these names in state
   // so we should be calling setName with an array of the other two only
   actions.authors.bulkNames(names)
-  t.truthy(actions.authors.setName.calledWith([names[1], names[2]]))
+  t.true(actions.authors.setName.calledWith([names[1], names[2]]))
   setNameStub.restore()
 })
 
@@ -164,7 +164,7 @@ test('authors: get', (t) => {
   const authors = { me123: 'pete', you123: 'fabian' }
   state.set('authors', authors)
   let stateAuthors = actions.authors.get() // Immutable
-  t.truthy(Immutable.is(stateAuthors, Immutable.fromJS(authors)))
+  t.true(Immutable.is(stateAuthors, Immutable.fromJS(authors)))
 
   // also has a JS method
   stateAuthors = actions.authors.getJS()
@@ -208,8 +208,8 @@ test('authors: updateFriends', (t) => {
   t.deepEqual(following.toJS(), ['a', 'c'])
   t.deepEqual(blocking.toJS(), ['b'])
 
-  t.truthy(listenerStub.calledOnce)
-  t.truthy(actions.authors.bulkNames.calledWith(['a', 'c', 'b']))
+  t.true(listenerStub.calledOnce)
+  t.true(actions.authors.bulkNames.calledWith(['a', 'c', 'b']))
   listenerStub.resetHistory()
   bulkStub.restore()
 })
@@ -219,7 +219,7 @@ test('authors: getFriends', (t) => {
   state.set('friends', friends)
 
   let stateFriends = actions.authors.getFriends()
-  t.truthy(Immutable.is(stateFriends, Immutable.fromJS(friends)))
+  t.true(Immutable.is(stateFriends, Immutable.fromJS(friends)))
 
   // also has a JS method
   stateFriends = actions.authors.getFriendsJS()

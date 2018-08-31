@@ -43,12 +43,12 @@ test('me: setMe', (t) => {
   // me is set in state
   t.is(state.get('me'), 'me123')
   // events were emitted
-  t.truthy(listenerStub.calledTwice)
+  t.true(listenerStub.calledTwice)
   listenerStub.resetHistory()
 
   // my names are correct
   const myNames = state.get('myNames')
-  t.truthy(Immutable.is(myNames, Immutable.fromJS([
+  t.true(Immutable.is(myNames, Immutable.fromJS([
     'abc',
     'def',
     'pete'
@@ -60,7 +60,7 @@ test('me: names', (t) => {
   const myNames = ['pete', 'squicc']
   state.set('myNames', myNames)
   const stateMyNames = actions.me.names()
-  t.truthy(Immutable.is(stateMyNames, Immutable.fromJS(myNames)))
+  t.true(Immutable.is(stateMyNames, Immutable.fromJS(myNames)))
 
   // also has a JS method
   t.deepEqual(actions.me.namesJS(), myNames)
