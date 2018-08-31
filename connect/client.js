@@ -1,37 +1,58 @@
 const path = require('path')
 const child = require('child_process')
-const config = require('ssb-config')
 const ssbKeys = require('ssb-keys')
+const ssbConfig = require('ssb-config/inject')
 const client = require('ssb-client')
 
-config.keys = ssbKeys.loadOrCreateSync(path.join(config.path, 'secret'))
-
 let retriesRemaining = 5
+let keys
+let ready
 let server
 let started = false
 
+const startServer = () => {
+  // start scuttle shell if haven't already tried starting it
+  if (!started) {
+    server = child.fork(path.resolve(__dirname, './start'), {
+      stdio: [
+        'ignore',
+        'ignore',
+        'ignore',
+        'ipc'
+      ]
+    })
+    const config = ssbConfig()
+    config.keys = ssbKeys.loadOrCreateSync(path.join(config.path, 'secret'))
+    server.send({ config })
+    server.on('message', () => { ready = true })
+    started = true
+  }
+}
+
 const tryConnect = (cb) => {
   retriesRemaining--
-  // Check if sbot/scutlle-shell is already running
-  client(config.keys, config, (err, sbot) => {
-    // err implies no server currently running
-    if (err) {
-      // start scuttle shell if haven't already tried starting it
-      if (!started) {
-        server = child.fork(path.resolve(__dirname, './start'), {
-          stdio: [
-            'ignore',
-            'ignore',
-            'ignore',
-            'ipc'
-          ]
-        })
-        server.send({ config })
-        started = true
-      }
+  // Check if sbot is already running
+  try {
+    if (!started || (started && ready)) {
+      const config = ssbConfig()
+      config.keys = ssbKeys.loadOrCreateSync(path.join(config.path, 'secret'))
+      client(config, (err, sbot) => {
+        // err implies no server currently running
+        if (err) {
+          startServer()
+        }
+        cb(null, sbot)
+      })
+    } else {
+      cb()
     }
-    cb(null, sbot)
-  })
+  } catch (e) {
+    // if this is the first time running, ssb-client will throw a manifest error
+    // so let's start up the server and try again
+    console.log('New scuttlebutt identity created...')
+    startServer()
+    cb()
+  }
 }
 
 module.exports = {

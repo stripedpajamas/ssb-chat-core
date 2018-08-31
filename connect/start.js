@@ -42,4 +42,5 @@ const start = (config) => {
 
   // write RPC manifest to ~/.ssb/manifest.json
   fs.writeFileSync(manifestFile, JSON.stringify(server.getManifest(), null, 2))
+  process.send('server-started')
 }

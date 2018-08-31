@@ -3,8 +3,7 @@ dependencies:
   nanobus: 4.3.3
   node-persist: 2.1.0
   pull-stream: 3.6.9
-  punycode: 2.1.1
-  scuttlebot: 11.3.3
+  scuttlebot: 11.4.2
   ssb-about: 0.1.2
   ssb-backlinks: 0.7.3
   ssb-blobs: 1.1.5
@@ -370,6 +369,7 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-qBFcVeSnAv5NFQq9OHKCKn4J/Jg=
+      tarball: 'http://registry.npmjs.org/chalk/-/chalk-1.1.3.tgz'
   /chalk/2.4.1:
     dependencies:
       ansi-styles: 3.2.1
@@ -806,6 +806,7 @@ packages:
       eslint-plugin-react: '>=7.6.1'
     resolution:
       integrity: sha512-rLToPAEqLMPBfWnYTu6xRhm2OWziS2n40QFqJ8jAM8NSVzeVKTa3nclhsU4DpPJQRY60F34Oo1wi/71PN/eITg==
+      tarball: 'http://registry.npmjs.org/eslint-config-standard-jsx/-/eslint-config-standard-jsx-5.0.0.tgz'
   /eslint-config-standard/11.0.0/c2d7c70aafbe4f1fc6da77aaebc0d43a:
     dependencies:
       eslint: 4.18.2
@@ -823,6 +824,7 @@ packages:
       eslint-plugin-standard: '>=3.0.1'
     resolution:
       integrity: sha512-oDdENzpViEe5fwuRCWla7AXQd++/oyIp8zP+iP9jiUPG6NBj3SHgdgtl/kTn00AjeN+1HNvavTKmYbMo+xMOlw==
+      tarball: 'http://registry.npmjs.org/eslint-config-standard/-/eslint-config-standard-11.0.0.tgz'
   /eslint-import-resolver-node/0.3.2:
     dependencies:
       debug: 2.6.9
@@ -1057,6 +1059,7 @@ packages:
       node: '>=0.12'
     resolution:
       integrity: sha512-bSn6gvGxKt+b7+6TKEv1ZycHleA7aHhRHyAqJyp5pbUFuYYNIzpZnQDk7AsYckyWdEnTeAnay0aCy2aV6iTk9A==
+      tarball: 'http://registry.npmjs.org/external-editor/-/external-editor-2.2.0.tgz'
   /extglob/0.3.2:
     dependencies:
       is-extglob: 1.0.0
@@ -2141,6 +2144,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
+      tarball: 'http://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz'
   /monotonic-timestamp/0.0.9:
     dev: false
     resolution:
@@ -2957,12 +2961,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ruPMNRkN3MHP1cWJc9OWr+T/xDP0jhXYCLfJcBuX54hhfIBnaQmAUMfDcG4DM5UMWByBbJY69QSphm3jtDKIkA==
-  /punycode/2.1.1:
-    dev: false
-    engines:
-      node: '>=6'
-    resolution:
-      integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
   /push-stream-to-pull-stream/1.0.3:
     dependencies:
       pull-looper: 1.0.0
@@ -3198,6 +3196,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI=
+      tarball: 'http://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz'
   /rimraf/2.4.5:
     dependencies:
       glob: 6.0.4
@@ -3205,6 +3204,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-7nEM5dk6j9uFb7Xqj/Di11k0sto=
+      tarball: 'http://registry.npmjs.org/rimraf/-/rimraf-2.4.5.tgz'
   /rimraf/2.6.2:
     dependencies:
       glob: 7.1.3
@@ -3240,7 +3240,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
-  /scuttlebot/11.3.3:
+  /scuttlebot/11.4.2:
     dependencies:
       atomic-file: 0.0.1
       bash-color: 0.0.4
@@ -3302,7 +3302,7 @@ packages:
     dev: false
     hasBin: true
     resolution:
-      integrity: sha512-1F2PVf1HfU3dbCwa5AxKbXEmMEhz0vlsetc5HoBkAr+L4U3SR9NaO+oPNa9NuUc9lVM1wqCrLjDU2nu824bGvQ==
+      integrity: sha512-JbOKdMFCyoALwpiK5FM8qikpFvEqCdRycbFGiOdhhQT0VrTWCO1PXDFuDAHnCBTDYvjjO88M9njq2BOXVypvAg==
   /secret-handshake/1.1.13:
     dependencies:
       chloride: 2.2.10
@@ -3682,6 +3682,7 @@ packages:
       integrity: sha512-k7CCfdugGYvNMZekGJXcCYuCdf7MEP+bBZr+AsZO5KqaNb4K9CuP6W1wGoKH6vkparhaCKc85jO46EbWsEoVDQ==
   /ssb-validate/3.0.10:
     dependencies:
+      ssb-keys: 7.0.16
       ssb-ref: 2.11.2
     dev: false
     resolution:
@@ -3713,6 +3714,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-LA531C3+nljom/XRvdW/hGPXwmilRkaRkENhO3FAGF1Vtq/WtCXzgmnc5S6vUHHsgv534MRy02C1ikMwZXC+tw==
+      tarball: 'http://registry.npmjs.org/standard-engine/-/standard-engine-8.0.1.tgz'
   /standard/11.0.1:
     dependencies:
       eslint: 4.18.2
@@ -3730,6 +3732,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-nu0jAcHiSc8H+gJCXeiziMVZNDYi8MuqrYJKxTgjP4xKXZMKm311boqQIzDrYI/ktosltxt2CbDjYQs9ANC8IA==
+      tarball: 'http://registry.npmjs.org/standard/-/standard-11.0.1.tgz'
   /statistics/3.3.0:
     dev: false
     resolution:
@@ -4168,8 +4171,7 @@ specifiers:
   nanobus: ^4.3.3
   node-persist: ^2.1.0
   pull-stream: ^3.6.7
-  punycode: ^2.1.1
-  scuttlebot: ~11.3.3
+  scuttlebot: ^11.3.3
   ssb-about: ^0.1.2
   ssb-backlinks: ^0.7.2
   ssb-blobs: ^1.1.5

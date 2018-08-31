@@ -26,22 +26,6 @@ const processor = (msg) => {
         .catch(() => {}) // ignore failure to decrypt private messages
     }
     switch (m.content.type) {
-      case constants.CONTACT:
-        if (m.author === me) { // i did something
-          if (typeof m.content.following !== 'undefined') {
-            // i followed/unfollowed someone
-            actions.authors.setFollowing(m.content.contact, m.content.following)
-          } else if (typeof m.content.blocking !== 'undefined') {
-            actions.authors.setBlock(m.content.contact, m.content.following)
-          }
-        } else { // someone else did something
-          if (m.content.contact === me) {
-            if (typeof m.content.following !== 'undefined') {
-              actions.authors.setFollowingMe(m.author, m.content.following)
-            }
-          }
-        }
-        break
       case constants.MESSAGE_TYPE:
         messages.push({
           key: msg.key,

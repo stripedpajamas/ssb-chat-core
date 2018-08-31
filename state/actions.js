@@ -124,9 +124,11 @@ const setMe = (me) => {
       return
     }
     const myNames = new Set()
-    Object.keys(authors[me].name).forEach((setter) => {
-      myNames.add(authors[me].name[setter][0])
-    })
+    if (authors[me]) {
+      Object.keys(authors[me].name).forEach((setter) => {
+        myNames.add(authors[me].name[setter][0])
+      })
+    }
     state.set('myNames', [...myNames])
     events.emit('my-names-changed', [...myNames])
   })
