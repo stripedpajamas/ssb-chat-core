@@ -1,5 +1,4 @@
 const Immutable = require('immutable')
-const punycode = require('punycode') // eslint-disable-line
 const state = require('./')
 const events = require('./events')
 const storage = require('../util/storage')
@@ -10,7 +9,7 @@ let actions
 // #region author actions
 const setGoodName = (id, authors) => {
   const me = state.get('me')
-  const names = (authors[id] || {}).name
+  const names = (authors[id] || {}).name || {}
   const latestFromSelf = { value: id, timestamp: 0 }
   const latestFromMe = { value: id, timestamp: 0 }
   Object.keys(names).forEach((user) => {
@@ -37,7 +36,6 @@ const setGoodName = (id, authors) => {
     return
   }
   state.setIn(['authors', id], latestFromSelf.value)
-  return
 }
 const setName = (id) => {
   const sbot = state.get('sbot')
@@ -52,7 +50,7 @@ const setName = (id) => {
     } else {
       input = [id]
     }
-    input.forEach(i => setGoodName(i, authors))
+    input.forEach(i => actions.authors.setGoodName(i, authors))
     events.emit('authors-changed', getAll().toJS())
   })
 }
@@ -61,7 +59,7 @@ const getName = (id) => {
   if (!name || name === id) {
     // if we don't have a name for the requested id
     // try to get it from sbot (and cache it for later)
-    setName(id)
+    actions.authors.setName(id)
   }
   return name || id
 }
@@ -73,14 +71,14 @@ const bulkNames = (ids) => {
       pending.add(id)
     }
   })
-  setName([...pending])
+  actions.authors.setName([...pending])
 }
 const getId = (name) => {
   const authorId = state.get('authors')
     .findKey(author => author === name || author === `@${name}`)
   return authorId || name
 }
-const findMatches = (partial) => getAll()
+const findMatches = (partial) => actions.authors.get()
   .filter(name => name.startsWith(partial))
   .toArray()
 const getAll = () => state.get('authors')
@@ -106,7 +104,7 @@ const updateFriends = () => {
     events.emit('friends-changed', state.get('friends').toJS())
 
     // also grab the names of these contacts for searching later
-    bulkNames([...following, ...blocking])
+    actions.authors.bulkNames([...following, ...blocking])
   })
 }
 const getFriends = () => state.get('friends')
@@ -358,9 +356,11 @@ const removeRecent = (recipients) => {
 
 actions = module.exports = {
   authors: {
+    bulkNames,
     get: getAll,
     getJS: () => getAll().toJS(),
     setName,
+    setGoodName,
     getName,
     getId,
     findMatches,
@@ -372,7 +372,7 @@ actions = module.exports = {
     get: getMe,
     set: setMe,
     names,
-    namesJS: () => names().toJS(),
+    namesJS: () => names().toJS()
   },
   messages: {
     get: getMessages,

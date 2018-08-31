@@ -4,7 +4,8 @@
   "description": "scuttlebutt chat core",
   "main": "index.js",
   "scripts": {
-    "test": "standard"
+    "lint": "standard",
+    "test": "nyc ava"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,9 @@
   },
   "homepage": "https://github.com/stripedpajamas/ssb-chat-core#readme",
   "devDependencies": {
+    "ava": "^0.25.0",
+    "nyc": "^13.0.1",
+    "sinon": "^6.1.5",
     "standard": "^11.0.1"
   },
   "dependencies": {

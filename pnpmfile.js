@@ -22,6 +22,7 @@ module.exports = {
           }
           delete pkg.devDependencies['pull-stream']
           context.log(`Added pull-stream@${pullStreamVersion} to ${pkg.name} dependencies`)
+          break
         }
         default:
           break
