@@ -316,7 +316,9 @@ const setAsRead = (recps) => {
 // #region options actions
 const getOptions = () => state.get('options')
 const setOptions = (opts) => {
-  Object.keys(opts).forEach(key => { setOption(key, opts[key]) })
+  Object.keys(opts).forEach(key => {
+    actions.options.set(key, opts[key])
+  })
 }
 const setOption = (key, val) => {
   state.setIn(['options', key], val)
