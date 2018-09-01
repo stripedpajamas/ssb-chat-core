@@ -5,11 +5,13 @@ const { mode, recipients } = actions
 
 const sendPrivateMessage = ({ text, action }) => new Promise((resolve, reject) => {
   return modules.private({ text, recipients: recipients.get(), action })
+    .then(resolve)
     .catch(() => reject(new Error('Could not send private message')))
 })
 
 const sendPublicMessage = ({ text, action }) => new Promise((resolve, reject) => {
   return modules.post({ text, action })
+    .then(resolve)
     .catch(() => reject(new Error('Failed to post message')))
 })
 

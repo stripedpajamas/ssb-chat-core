@@ -37,7 +37,7 @@ test('recents: remove', (t) => {
 
   const listenerStub = sinon.stub()
   events.on('recents-changed', listenerStub)
-  
+
   actions.recents.remove(recipients)
   t.true(listenerStub.calledOnce)
   t.true(storage.recentStorage.removeItemSync.calledWith('a,b,c'))

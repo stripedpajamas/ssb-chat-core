@@ -44,7 +44,7 @@ test('messages: addInPlace', (t) => {
   expected = Immutable.List([
     Immutable.Map({ timestamp: 3 }),
     Immutable.Map({ timestamp: 4 }),
-    Immutable.Map(msg),
+    Immutable.Map(msg)
   ])
   state.set('messages', msgs)
   actions.messages.addInPlace(msg)
@@ -67,16 +67,22 @@ test('messages: refreshFiltered', (t) => {
   // updates filtered messages based on current mode
   // and current private recipients
   const msgs = Immutable.List([
-    Immutable.Map({ text: 'blah', private: true, recipients: Immutable.Set([
-      'a', 'b'
-    ]) }),
-    Immutable.Map({ text: 'blegh', private: true, recipients: Immutable.Set([
-      'a', 'b'
-    ]) }),
+    Immutable.Map({ text: 'blah',
+      private: true,
+      recipients: Immutable.Set([
+        'a', 'b'
+      ]) }),
+    Immutable.Map({ text: 'blegh',
+      private: true,
+      recipients: Immutable.Set([
+        'a', 'b'
+      ]) }),
     Immutable.Map({ text: 'pubpub1' }),
-    Immutable.Map({ text: 'boop', private: true, recipients: Immutable.Set([
-      'a', 'c'
-    ]) }),
+    Immutable.Map({ text: 'boop',
+      private: true,
+      recipients: Immutable.Set([
+        'a', 'c'
+      ]) }),
     Immutable.Map({ text: 'pubpub2' })
   ])
   state.set('messages', msgs)
@@ -101,12 +107,16 @@ test('messages: refreshFiltered', (t) => {
   actions.messages.refreshFiltered()
   filtered = state.get('filteredMessages')
   expected = Immutable.List([
-    Immutable.Map({ text: 'blah', private: true, recipients: Immutable.Set([
-      'a', 'b'
-    ]) }),
-    Immutable.Map({ text: 'blegh', private: true, recipients: Immutable.Set([
-      'a', 'b'
-    ]) })
+    Immutable.Map({ text: 'blah',
+      private: true,
+      recipients: Immutable.Set([
+        'a', 'b'
+      ]) }),
+    Immutable.Map({ text: 'blegh',
+      private: true,
+      recipients: Immutable.Set([
+        'a', 'b'
+      ]) })
   ])
   t.true(listenerStub.calledOnce)
   t.true(Immutable.is(filtered, expected))
@@ -189,4 +199,3 @@ test('messages: push', (t) => {
   actions.messages.refreshFiltered.restore()
   actions.storage.hasThisBeenRead.restore()
 })
-

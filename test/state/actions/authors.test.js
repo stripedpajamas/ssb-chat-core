@@ -5,7 +5,7 @@ const state = require('../../../state/index')
 const events = require('../../../state/events')
 const actions = require('../../../state/actions')
 
-test('authors: setGoodName', (t) => {
+test('authors: setGoodName: uses my identification of another person', (t) => {
   // takes in an id and an authors object and
   // determines the latest self-identification
   // or the latest identification by `me`,
@@ -32,16 +32,53 @@ test('authors: setGoodName', (t) => {
 
   // we asked the action to find the name for 'you123' given the authors object
   // you123 was identified by me (me123) as 'you' and by themselves (you123) as 'you123'
-  // this action should select my own identification of you123: 'you'. 
+  // this action should select my own identification of you123: 'you'.
   t.is(state.getIn(['authors', id]), 'you')
+})
 
+test('authors: setGoodName: uses someone\'s self-identification', (t) => {
+  state.set('me', 'me123')
+  const id = 'you123'
+  const authors = {
+    me123: {
+      name: {
+        me123: ['myself', 5], // who did it: ['what they did', 'when they did it']
+        him234: ['pete', 6]
+      }
+    },
+    you123: {
+      name: {
+        me123: ['you', 2],
+        him234: ['someone', 3],
+        you123: ['you123', 3]
+      }
+    }
+  }
   // if we remove the entry from authors that i set for you123
   delete authors.you123.name.me123
   // then the action should return you123's own identification of themselves (you123)
 
   actions.authors.setGoodName(id, authors)
   t.is(state.getIn(['authors', id]), 'you123')
+})
 
+test('authors: setGoodName: sets name as id if we dont know it', (t) => {
+  state.set('me', 'me123')
+  const authors = {
+    me123: {
+      name: {
+        me123: ['myself', 5], // who did it: ['what they did', 'when they did it']
+        him234: ['pete', 6]
+      }
+    },
+    you123: {
+      name: {
+        me123: ['you', 2],
+        him234: ['someone', 3],
+        you123: ['you123', 3]
+      }
+    }
+  }
   // if sbot has no abouts for someone that shouldn't be a problem
   // we will just use the id
   actions.authors.setGoodName('bad123', authors)
@@ -91,10 +128,10 @@ test('authors: setName', (t) => {
     .firstCall
     .calledWith(ids[0], fakeAuthors) &&
   actions
-  .authors
-  .setGoodName
-  .secondCall
-  .calledWith(ids[1], fakeAuthors)
+    .authors
+    .setGoodName
+    .secondCall
+    .calledWith(ids[1], fakeAuthors)
 
   t.true(correctCalledWith)
   t.true(listenerStub.calledOnce) // one event even for multiple updates
@@ -121,7 +158,7 @@ test('authors: getName', (t) => {
     me123: 'pete'
   })
   sinon.stub(actions.authors, 'setName')
-  
+
   // name exists
   let name = actions.authors.getName('me123')
   t.is(name, 'pete')
@@ -227,10 +264,10 @@ test('authors: updateFriends', (t) => {
 
   t.true(listenerStub.calledOnce)
   t.true(actions.authors.bulkNames.calledWith(['a', 'c', 'b']))
-  
+
   listenerStub.resetHistory()
   actions.authors.bulkNames.resetHistory()
-  
+
   // it shouldn't call anything or emit anything
   // if the sbot threw an error
   sbot.friends.get = (_, cb) => cb(new Error('blah'))

@@ -43,4 +43,4 @@ class CoreState {
   }
 }
 
-module.exports = new CoreState(initialState)
+module.exports = new CoreState()
