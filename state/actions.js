@@ -10,40 +10,31 @@ let actions
 const setGoodName = (id, authors) => {
   const me = state.get('me')
   const names = (authors[id] || {}).name || {}
-  const latestFromSelf = { value: id, timestamp: 0 }
-  const latestFromMe = { value: id, timestamp: 0 }
+  let latestFromSelf = id
+  let latestFromMe = id
   Object.keys(names).forEach((user) => {
     // figure out the latest self-identification
     // or the latest identification by `me`
     if (user === id) {
-      if (names[user][1] > latestFromSelf.timestamp) {
-        latestFromSelf.value = names[user][0]
-        latestFromSelf.timestamp = names[user][1]
-      }
+      latestFromSelf = names[user][0]
     }
     if (user === me) {
-      if (names[user][1] > latestFromMe.timestamp) {
-        latestFromMe.value = names[user][0]
-        latestFromMe.timestamp = names[user][1]
-      }
+      latestFromMe = names[user][0]
     }
   })
   // if we have something other than the id set by `me` return it
   // otherwise return the latest self identification
   // otherwise return the original id
-  if (latestFromMe.value !== id) {
-    state.setIn(['authors', id], latestFromMe.value)
+  if (latestFromMe !== id) {
+    state.setIn(['authors', id], latestFromMe)
     return
   }
-  state.setIn(['authors', id], latestFromSelf.value)
+  state.setIn(['authors', id], latestFromSelf)
 }
 const setName = (id) => {
   const sbot = state.get('sbot')
   sbot.about.get((err, authors) => {
-    if (err) {
-      console.log(err)
-      return
-    }
+    if (err) { return }
     let input
     if (Array.isArray(id)) {
       input = id
@@ -87,10 +78,7 @@ const updateFriends = () => {
   const sbot = state.get('sbot')
 
   sbot.friends.get({ source: me }, (err, data) => {
-    if (err) {
-      console.log(err)
-      return
-    }
+    if (err) { return }
     const following = new Set()
     const blocking = new Set()
     Object.keys(data).forEach((id) => {
@@ -119,6 +107,8 @@ const setMe = (me) => {
   // also get my names and add them to state
   state.get('sbot').about.get((err, authors) => {
     if (err) {
+      state.set('myNames', [])
+      events.emit('my-names-changed', [])
       return
     }
     const myNames = new Set()
@@ -174,7 +164,7 @@ const refreshFiltered = () => {
   events.emit('messages-changed', getMessages().toJS())
 }
 const push = (msg) => {
-  addInPlace(msg)
+  actions.messages.addInPlace(msg)
   if (msg.private) {
     const myId = actions.me.get()
     // if we don't already have a root for private messages in this chat,
@@ -204,7 +194,7 @@ const push = (msg) => {
     }
   }
 
-  refreshFiltered()
+  actions.messages.refreshFiltered()
 }
 // #endregion
 
@@ -334,7 +324,7 @@ const storeAsRead = (message) => {
 }
 const markFilteredMessagesRead = () => {
   const filteredMessages = actions.messages.get()
-  filteredMessages.forEach(msg => storeAsRead(msg))
+  filteredMessages.forEach(msg => actions.storage.storeAsRead(msg))
 }
 const hasThisBeenRead = (message) => storage.readStorage.getItemSync(message.key)
 // #endregion
@@ -347,12 +337,12 @@ const getRecents = () => {
 const addRecent = (recipients) => {
   const key = recipients.toArray().join(',')
   storage.recentStorage.setItemSync(key, true)
-  events.emit('recents-changed', getRecents()) // recents is not Immutable
+  events.emit('recents-changed', actions.recents.get()) // recents is not Immutable
 }
 const removeRecent = (recipients) => {
   const key = recipients.join(',')
   storage.recentStorage.removeItemSync(key)
-  events.emit('recents-changed', getRecents())
+  events.emit('recents-changed', actions.recents.get())
 }
 // #endregion
 
@@ -377,6 +367,7 @@ actions = module.exports = {
     namesJS: () => names().toJS()
   },
   messages: {
+    addInPlace,
     get: getMessages,
     getJS: () => getMessages().toJS(),
     push,
@@ -416,6 +407,7 @@ actions = module.exports = {
     setOptions
   },
   storage: {
+    storeAsRead,
     markFilteredMessagesRead,
     hasThisBeenRead
   },

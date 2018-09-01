@@ -33,7 +33,8 @@ test('me: setMe', (t) => {
       }
     }
   }
-  state.set('sbot', new Sbot())
+  const sbot = new Sbot()
+  state.set('sbot', sbot)
   const listenerStub = sinon.stub()
   events.on('me-changed', listenerStub)
   events.on('my-names-changed', listenerStub)
@@ -53,6 +54,21 @@ test('me: setMe', (t) => {
     'def',
     'pete'
   ])))
+
+  // it shouldn't set any names if sbot errored
+  sbot.about.get = (cb) => cb(new Error('oh no'))
+  actions.me.set('me123')
+  t.true(Immutable.is(state.get('myNames'), Immutable.fromJS([])))
+  t.true(listenerStub.calledTwice)
+  listenerStub.resetHistory()
+
+  // similarly we shouldn't get any names if we don't know them
+  delete authors.me123
+  sbot.about.get = (cb) => cb(null, authors)
+  actions.me.set('me123')
+  t.true(Immutable.is(state.get('myNames'), Immutable.fromJS([])))
+  t.true(listenerStub.calledTwice)
+  listenerStub.resetHistory()
 })
 
 test('me: names', (t) => {

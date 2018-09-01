@@ -41,12 +41,17 @@ test('authors: setGoodName', (t) => {
 
   actions.authors.setGoodName(id, authors)
   t.is(state.getIn(['authors', id]), 'you123')
+
+  // if sbot has no abouts for someone that shouldn't be a problem
+  // we will just use the id
+  actions.authors.setGoodName('bad123', authors)
+  t.is(state.getIn(['authors', 'bad123']), 'bad123')
 })
 
 test('authors: setName', (t) => {
   // this calls setGoodName with an authors object it gets from sbot
   // we will stub setGoodName so we know it gets called
-  const setGoodNameStub = sinon.stub(actions.authors, 'setGoodName')
+  sinon.stub(actions.authors, 'setGoodName')
   const fakeAuthors = {
     me123: {},
     you123: {}
@@ -58,7 +63,8 @@ test('authors: setName', (t) => {
       }
     }
   }
-  state.set('sbot', new Sbot())
+  const sbot = new Sbot()
+  state.set('sbot', sbot)
   const id = 'me123'
 
   // it should also emit an event that authors have changed
@@ -92,8 +98,19 @@ test('authors: setName', (t) => {
 
   t.true(correctCalledWith)
   t.true(listenerStub.calledOnce) // one event even for multiple updates
+  actions.authors.setGoodName.resetHistory()
+  listenerStub.resetHistory()
 
-  setGoodNameStub.restore()
+  // if there is an error from sbot
+  // it won't call anything or emit anything
+  sbot.about.get = (cb) => (new Error('bad'))
+  state.set('sbot', sbot)
+  actions.authors.setName(ids)
+  t.true(actions.authors.setGoodName.notCalled)
+  t.true(listenerStub.notCalled)
+
+  listenerStub.resetHistory()
+  actions.authors.setGoodName.restore()
 })
 
 test('authors: getName', (t) => {
@@ -103,7 +120,7 @@ test('authors: getName', (t) => {
   state.set('authors', {
     me123: 'pete'
   })
-  const setNameStub = sinon.stub(actions.authors, 'setName')
+  sinon.stub(actions.authors, 'setName')
   
   // name exists
   let name = actions.authors.getName('me123')
@@ -114,7 +131,7 @@ test('authors: getName', (t) => {
   t.is(name, 'you123') // returns id
   // confirm that it called setName to get what it was missing
   t.true(actions.authors.setName.calledWith('you123'))
-  setNameStub.restore()
+  actions.authors.setName.restore()
 })
 
 test('authors: bulkNames', (t) => {
@@ -123,13 +140,13 @@ test('authors: bulkNames', (t) => {
   state.set('authors', {
     me123: 'pete'
   })
-  const setNameStub = sinon.stub(actions.authors, 'setName')
+  sinon.stub(actions.authors, 'setName')
   const names = ['me123', 'you123', 'her123']
   // we have one of these names in state
   // so we should be calling setName with an array of the other two only
   actions.authors.bulkNames(names)
   t.true(actions.authors.setName.calledWith([names[1], names[2]]))
-  setNameStub.restore()
+  actions.authors.setName.restore()
 })
 
 test('authors: getId', (t) => {
@@ -188,16 +205,16 @@ test('authors: updateFriends', (t) => {
       }
     }
   }
-
+  const sbot = new Sbot()
   state.set('me', 'me123')
-  state.set('sbot', new Sbot())
+  state.set('sbot', sbot)
 
   // expecting an event
   const listenerStub = sinon.stub()
   events.on('friends-changed', listenerStub)
 
   // also expecting it to call bulkNames
-  const bulkStub = sinon.stub(actions.authors, 'bulkNames')
+  sinon.stub(actions.authors, 'bulkNames')
 
   actions.authors.updateFriends()
 
@@ -210,8 +227,19 @@ test('authors: updateFriends', (t) => {
 
   t.true(listenerStub.calledOnce)
   t.true(actions.authors.bulkNames.calledWith(['a', 'c', 'b']))
+  
   listenerStub.resetHistory()
-  bulkStub.restore()
+  actions.authors.bulkNames.resetHistory()
+  
+  // it shouldn't call anything or emit anything
+  // if the sbot threw an error
+  sbot.friends.get = (_, cb) => cb(new Error('blah'))
+  actions.authors.updateFriends()
+  t.true(listenerStub.notCalled)
+  t.true(actions.authors.bulkNames.notCalled)
+
+  listenerStub.resetHistory()
+  actions.authors.bulkNames.restore()
 })
 
 test('authors: getFriends', (t) => {
