@@ -12,16 +12,18 @@ const setGoodName = (id, authors) => {
   const names = (authors[id] || {}).name || {}
   let latestFromSelf = id
   let latestFromMe = id
-  Object.keys(names).forEach((user) => {
-    // figure out the latest self-identification
-    // or the latest identification by `me`
-    if (user === id) {
-      latestFromSelf = names[user][0]
-    }
-    if (user === me) {
-      latestFromMe = names[user][0]
-    }
-  })
+  if (names) {
+    Object.keys(names).forEach((user) => {
+      // figure out the latest self-identification
+      // or the latest identification by `me`
+      if (user === id) {
+        latestFromSelf = names[user][0]
+      }
+      if (user === me) {
+        latestFromMe = names[user][0]
+      }
+    })
+  }
   // if we have something other than the id set by `me` return it
   // otherwise return the latest self identification
   // otherwise return the original id
@@ -33,17 +35,19 @@ const setGoodName = (id, authors) => {
 }
 const setName = (id) => {
   const sbot = state.get('sbot')
-  sbot.about.get((err, authors) => {
-    if (err) { return }
-    let input
-    if (Array.isArray(id)) {
-      input = id
-    } else {
-      input = [id]
-    }
-    input.forEach(i => actions.authors.setGoodName(i, authors))
-    events.emit('authors-changed', getAll().toJS())
-  })
+  if (sbot.about) {
+    sbot.about.get((err, authors) => {
+      if (err) { return }
+      let input
+      if (Array.isArray(id)) {
+        input = id
+      } else {
+        input = [id]
+      }
+      input.forEach(i => actions.authors.setGoodName(i, authors))
+      events.emit('authors-changed', getAll().toJS())
+    })
+  }
 }
 const getName = (id) => {
   const name = state.getIn(['authors', id])
@@ -105,21 +109,24 @@ const setMe = (me) => {
   events.emit('me-changed', state.get('me'))
 
   // also get my names and add them to state
-  state.get('sbot').about.get((err, authors) => {
-    if (err) {
-      state.set('myNames', [])
-      events.emit('my-names-changed', [])
-      return
-    }
-    const myNames = new Set()
-    if (authors[me]) {
-      Object.keys(authors[me].name).forEach((setter) => {
-        myNames.add(authors[me].name[setter][0])
-      })
-    }
-    state.set('myNames', [...myNames])
-    events.emit('my-names-changed', [...myNames])
-  })
+  const sbot = state.get('sbot')
+  if (sbot.about) {
+    sbot.about.get((err, authors) => {
+      if (err) {
+        state.set('myNames', [])
+        events.emit('my-names-changed', [])
+        return
+      }
+      const myNames = new Set()
+      if (authors[me]) {
+        Object.keys(authors[me].name).forEach((setter) => {
+          myNames.add(authors[me].name[setter][0])
+        })
+      }
+      state.set('myNames', [...myNames])
+      events.emit('my-names-changed', [...myNames])
+    })
+  }
 }
 const names = () => state.get('myNames')
 // #endregion
