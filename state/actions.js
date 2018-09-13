@@ -74,7 +74,7 @@ const getId = (name) => {
   return authorId || name
 }
 const findMatches = (partial) => actions.authors.get()
-  .filter(name => name.startsWith(partial))
+  .filter(name => name && name.startsWith(partial))
   .toArray()
 const getAll = () => state.get('authors')
 const updateFriends = () => {
