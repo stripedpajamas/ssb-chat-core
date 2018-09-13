@@ -228,9 +228,6 @@ const setPrivate = () => {
     state.set('privateMessageRoot', lastMessage.get('key'))
   }
 
-  // mark all messages in this conversation as read
-  actions.storage.markFilteredMessagesRead()
-
   // fire the mode change hook
   events.emit('mode-changed', constants.MODE.PRIVATE)
 }
@@ -307,6 +304,9 @@ const setAsRead = (recps) => {
   ))
   state.set('unreads', newUnreads)
   events.emit('unreads-changed', state.get('unreads').toJS())
+
+  // mark all messages in the current conversation as read
+  actions.storage.markFilteredMessagesRead()
 }
 // #endregion
 
