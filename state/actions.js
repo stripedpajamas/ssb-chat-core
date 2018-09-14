@@ -266,13 +266,13 @@ const getPrivateRecipients = () => state.get('privateRecipients')
 const setPrivateRecipients = (recipients) => {
   const privateRecipients = Immutable.Set(recipients).add(actions.me.get()).sort()
 
-  actions.unreads.setAsRead(privateRecipients)
   state.set('privateRecipients', privateRecipients)
 
   // add these recipients to recents storage
   actions.recents.add(privateRecipients)
 
   actions.mode.setPrivate()
+  actions.unreads.setAsRead(privateRecipients)
   events.emit('recipients-changed', state.get('privateRecipients').toJS())
 }
 const getNotMe = () => getPrivateRecipients()
