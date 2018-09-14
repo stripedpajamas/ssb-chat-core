@@ -172,6 +172,7 @@ const refreshFiltered = () => {
 }
 const push = (msg) => {
   actions.messages.addInPlace(msg)
+  actions.messages.refreshFiltered()
   if (msg.private) {
     const myId = actions.me.get()
     // if we don't already have a root for private messages in this chat,
@@ -200,8 +201,6 @@ const push = (msg) => {
       }
     }
   }
-
-  actions.messages.refreshFiltered()
 }
 // #endregion
 
