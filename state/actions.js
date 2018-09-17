@@ -70,7 +70,12 @@ const bulkNames = (ids) => {
 }
 const getId = (name) => {
   const authorId = state.get('authors')
-    .findKey(author => author === name || author === `@${name}`)
+    .findKey(author => {
+      if (name[0] === '@') {
+        return author === name.slice(1)
+      }
+      return author === name
+    })
   return authorId || name
 }
 const findMatches = (partial) => actions.authors.get()

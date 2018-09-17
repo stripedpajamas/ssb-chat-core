@@ -26,9 +26,10 @@ test.afterEach(() => {
   sbot.publish.resetHistory()
 })
 
-test('modules: about: does not publish if no client, target, or name', (t) => {
-  about()
-  t.true(sbot.publish.notCalled)
+test('modules: about: rejects if no client, target, or name', (t) => {
+  return about().catch((e) => {
+    t.is(e.message, 'client: [object Object] or target: undefined or name: undefined falsy')
+  })
 })
 
 test('modules: about: publishes an about message for an id', (t) => {

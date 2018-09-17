@@ -4,7 +4,7 @@ const actions = require('../state/actions')
 const state = require('../state')
 const messenger = require('../messenger')
 
-const { authors, options, unreads, recipients, mode } = actions
+const { me, authors, options, unreads, recipients, mode } = actions
 
 module.exports = {
   // a debug option to look up a state path
@@ -75,7 +75,7 @@ module.exports = {
       return resolve({ command: true, result: constants.COMMAND_TEXT.NAME.BAD_ARGS })
     }
 
-    return messenger.modules.about(name)
+    messenger.modules.about(name)
       .then(() => {
         // if i renamed myself, update my name in state
         authors.setName(actions.me.get())
@@ -167,9 +167,7 @@ module.exports = {
       .catch(() => reject(new Error(`Could not unfollow ${id}`)))
   }),
   whoami: () => new Promise((resolve, reject) => {
-    return messenger.modules.whoami()
-      .then((id) => resolve({ command: true, result: id }))
-      .catch(() => reject(new Error(constants.COMMAND_TEXT.WHOAMI.FAILURE)))
+    return resolve({ command: true, result: me.get() })
   }),
   whois: (id) => new Promise((resolve, reject) => {
     if (!id) {

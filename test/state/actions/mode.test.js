@@ -48,19 +48,16 @@ test('mode: setPrivate', (t) => {
   lastMessageStub.returns({
     get: () => 'last message key'
   })
-  sinon.stub(actions.storage, 'markFilteredMessagesRead')
   events.on('mode-changed', listenerStub)
 
   actions.mode.setPrivate()
   t.is(state.get('mode'), constants.MODE.PRIVATE)
   t.true(actions.messages.refreshFiltered.calledOnce)
   t.is(state.get('privateMessageRoot'), 'last message key')
-  t.true(actions.storage.markFilteredMessagesRead.calledOnce)
   t.true(listenerStub.calledOnce)
   listenerStub.resetHistory()
   actions.messages.get.restore()
   actions.messages.refreshFiltered.restore()
-  actions.storage.markFilteredMessagesRead.restore()
 })
 
 test('mode: isPrivate', (t) => {

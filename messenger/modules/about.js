@@ -20,6 +20,8 @@ module.exports = (name, who) => {
         if (err) return reject(err)
         resolve()
       })
+    } else {
+      reject(new Error(`client: ${client} or target: ${target} or name: ${name} falsy`))
     }
   })
 }

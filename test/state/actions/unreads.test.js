@@ -53,6 +53,7 @@ test('unreads: setAsRead', (t) => {
   ]
   state.set('unreads', unreads)
 
+  sinon.stub(actions.storage, 'markFilteredMessagesRead')
   const listenerStub = sinon.stub()
   events.emit('unreads-changed', listenerStub)
   actions.unreads.setAsRead(recps)
@@ -60,4 +61,6 @@ test('unreads: setAsRead', (t) => {
   // t.true(listenerStub.calledOnce)
   const newUnreads = state.get('unreads').toJS()
   t.deepEqual(newUnreads, [unreads[1].toJS()])
+  t.true(actions.storage.markFilteredMessagesRead.calledOnce)
+  actions.storage.markFilteredMessagesRead.restore()
 })
