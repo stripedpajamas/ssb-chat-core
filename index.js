@@ -56,7 +56,18 @@ module.exports = {
 
       // start streaming messages
       pull(
-        server.messagesByType({ type: constants.MESSAGE_TYPE, live: true, gt: since }),
+        server.query.read({
+          reverse: true,
+          live: true,
+          query: [{
+            $filter: {
+              value: {
+                content: { type: constants.MESSAGE_TYPE },
+                timestamp: { $gte: since }
+              }
+            }
+          }]
+        }),
         pull.drain(processor)
       )
 
