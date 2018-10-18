@@ -1,7 +1,6 @@
 const Immutable = require('immutable')
 const actions = require('../state/actions')
 const constants = require('./constants')
-const modules = require('../messenger/modules')
 
 const {
   authors,
@@ -14,17 +13,6 @@ const processor = (msg) => {
   const me = meState.get()
 
   if (m && m.content) {
-    // first see if we are dealing with an encrypted message
-    if (typeof m.content === 'string' || m.private) {
-      modules.unbox(m.content)
-        .then((content) => {
-          const decryptedMsg = msg
-          decryptedMsg.value.content = content
-          decryptedMsg.value.wasPrivate = true // so we can alter the ui
-          return processor(decryptedMsg)
-        })
-        .catch(() => {}) // ignore failure to decrypt private messages
-    }
     switch (m.content.type) {
       case constants.MESSAGE_TYPE:
         messages.push({
@@ -32,7 +20,7 @@ const processor = (msg) => {
           author: m.author,
           authorName: () => authors.getName(m.author),
           action: m.content.action,
-          private: m.wasPrivate,
+          private: m.private,
           recipients: Immutable.Set(m.content.recps || m.content.recipients), // backwards compatibility
           fromMe: m.author === me,
           text: m.content.text,
