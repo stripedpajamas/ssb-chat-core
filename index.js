@@ -1,4 +1,5 @@
 const pull = require('pull-stream')
+const unique = require('pull-stream/throughs/unique')
 const connect = require('./connect')
 const state = require('./state')
 const events = require('./state/events')
@@ -69,6 +70,16 @@ module.exports = {
           }]
         }),
         pull.drain(processor)
+      )
+
+      pull(
+        server.progress,
+        pull.map((data) => ({
+          current: data.indexes.current,
+          target: data.indexes.target
+        })),
+        unique(JSON.stringify),
+        pull.drain(actions.progress.set)
       )
 
       // let caller know that we are ready to rock n roll

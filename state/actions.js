@@ -357,6 +357,14 @@ const removeRecent = (recipients) => {
 }
 // #endregion
 
+// #region progress actions
+const setProgress = (progress) => {
+  state.set('progress', progress)
+  events.emit('progress-changed', state.get('progress').toJS())
+}
+const getProgress = () => state.get('progress')
+// #endregion
+
 actions = module.exports = {
   authors: {
     bulkNames,
@@ -426,5 +434,10 @@ actions = module.exports = {
     get: getRecents,
     add: addRecent,
     remove: removeRecent
+  },
+  progress: {
+    set: setProgress,
+    get: getProgress,
+    getJS: () => getProgress().toJS()
   }
 }
