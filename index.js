@@ -28,6 +28,7 @@ module.exports = {
   sbot: actions.sbot,
   options: actions.options,
   recents: actions.recents,
+  progress: actions.progress,
   start: (opts, cb) => {
     if (started) {
       // don't double start, thanks @korlando7

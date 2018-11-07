@@ -4,7 +4,7 @@ const ssbKeys = require('ssb-keys')
 const ssbConfig = require('ssb-config/inject')
 const client = require('ssb-client')
 
-let retriesRemaining = 5
+let retriesRemaining = 8
 let ready
 let server
 let started = false
