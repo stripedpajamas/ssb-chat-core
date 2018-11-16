@@ -17,22 +17,11 @@ test('me: setMe', (t) => {
   // emits an event
   // gets all my names
   // sets those in state too
-  const authors = {
-    me123: {
-      name: {
-        happy0: ['abc', 1],
-        jack: ['def', 2],
-        me123: ['pete', 2]
-      }
-    }
-  }
-  class Sbot {
-    constructor () {
-      this.about = {
-        get: (cb) => { cb(null, authors) }
-      }
-    }
-  }
+  const socialValues = sinon.stub().callsArgWith(1, null, {
+    a: 'pete',
+    b: 'squicc'
+  })
+  class Sbot { constructor () { this.about = { socialValues } } }
   const sbot = new Sbot()
   state.set('sbot', sbot)
   const listenerStub = sinon.stub()
@@ -41,34 +30,38 @@ test('me: setMe', (t) => {
 
   actions.me.set('me123')
 
-  // me is set in state
   t.is(state.get('me'), 'me123')
-  // events were emitted
   t.true(listenerStub.calledTwice)
-  listenerStub.resetHistory()
-
-  // my names are correct
   const myNames = state.get('myNames')
   t.true(Immutable.is(myNames, Immutable.fromJS([
-    'abc',
-    'def',
-    'pete'
+    'pete',
+    'squicc'
   ])))
-
-  // it shouldn't set any names if sbot errored
-  sbot.about.get = (cb) => cb(new Error('oh no'))
+})
+test('me: setMe does not set any names if sbot errored', (t) => {
+  const socialValues = sinon.stub().callsArgWith(1, new Error())
+  class Sbot { constructor () { this.about = { socialValues } } }
+  const sbot = new Sbot()
+  state.set('sbot', sbot)
+  const listenerStub = sinon.stub()
+  events.on('me-changed', listenerStub)
+  events.on('my-names-changed', listenerStub)
   actions.me.set('me123')
   t.true(Immutable.is(state.get('myNames'), Immutable.fromJS([])))
   t.true(listenerStub.calledTwice)
-  listenerStub.resetHistory()
+})
 
-  // similarly we shouldn't get any names if we don't know them
-  delete authors.me123
-  sbot.about.get = (cb) => cb(null, authors)
+test('me: setMe will not set anything if sbot has no names', (t) => {
+  const socialValues = sinon.stub().callsArgWith(1, null, {})
+  class Sbot { constructor () { this.about = { socialValues } } }
+  const sbot = new Sbot()
+  state.set('sbot', sbot)
+  const listenerStub = sinon.stub()
+  events.on('me-changed', listenerStub)
+  events.on('my-names-changed', listenerStub)
   actions.me.set('me123')
   t.true(Immutable.is(state.get('myNames'), Immutable.fromJS([])))
   t.true(listenerStub.calledTwice)
-  listenerStub.resetHistory()
 })
 
 test('me: names', (t) => {

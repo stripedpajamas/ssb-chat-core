@@ -1,3 +1,4 @@
+const debug = require('debug')('ssb-chat-core:actions')
 const Immutable = require('immutable')
 const state = require('./')
 const events = require('./events')
@@ -7,51 +8,45 @@ const constants = require('../util/constants')
 let actions
 
 // #region author actions
-const setGoodName = (id, authors) => {
-  const me = state.get('me')
-  const names = (authors[id] || {}).name || {}
-  let latestFromSelf = id
-  let latestFromMe = id
-  if (names) {
-    Object.keys(names).forEach((user) => {
-      // figure out the latest self-identification
-      // or the latest identification by `me`
-      if (user === id) {
-        latestFromSelf = names[user][0]
-      }
-      if (user === me) {
-        latestFromMe = names[user][0]
-      }
-    })
-  }
-  // if we have something other than the id set by `me` return it
-  // otherwise return the latest self identification
-  // otherwise return the original id
-  if (latestFromMe !== id) {
-    state.setIn(['authors', id], latestFromMe)
-    return
-  }
-  state.setIn(['authors', id], latestFromSelf)
-}
 const setName = (id) => {
+  debug('attempting to set real name for %s', id)
   const sbot = state.get('sbot')
-  if (sbot.about) {
-    sbot.about.get((err, authors) => {
-      if (err) { return }
-      let input
-      if (Array.isArray(id)) {
-        input = id
-      } else {
-        input = [id]
-      }
-      input.forEach(i => actions.authors.setGoodName(i, authors))
-      events.emit('authors-changed', getAll().toJS())
+  if (sbot.about && sbot.about.socialValue) {
+    let input
+    if (Array.isArray(id)) {
+      input = id
+    } else {
+      input = [id]
+    }
+    let promises = []
+    input.forEach((i) => {
+      promises.push(new Promise((resolve) => {
+        sbot.about.socialValue({ key: 'name', dest: i }, (err, name) => {
+          if (err) {
+            debug('sbot returned error getting name for %s: %s', id, err.message)
+            return resolve()
+          }
+          state.setIn(['authors', i], name)
+          debug('set name for %s in state to %s', i, name)
+          return resolve()
+        })
+      }))
     })
+    return Promise.all(promises)
+      .then(() => {
+        debug('emitting an event because authors have changed')
+        events.emit('authors-changed', getAll().toJS())
+      })
+      .catch((e) => {})
+  } else {
+    debug('sbot.about.socialValue is undefined, no name can be set for %s', id)
   }
 }
 const getName = (id) => {
+  debug('attempting to get name from state for %s', id)
   const name = state.getIn(['authors', id])
   if (!name || name === id) {
+    debug('name not found in state for %s', id)
     // if we don't have a name for the requested id
     // try to get it from sbot (and cache it for later)
     actions.authors.setName(id)
@@ -83,11 +78,15 @@ const findMatches = (partial) => actions.authors.get()
   .toArray()
 const getAll = () => state.get('authors')
 const updateFriends = () => {
+  debug('updating friends')
   const me = state.get('me')
   const sbot = state.get('sbot')
 
   sbot.friends.get({ source: me }, (err, data) => {
-    if (err) { return }
+    if (err) {
+      debug('sbot errored when getting friends: %s', err.message)
+      return
+    }
     const following = new Set()
     const blocking = new Set()
     Object.keys(data).forEach((id) => {
@@ -97,7 +96,9 @@ const updateFriends = () => {
         blocking.add(id)
       }
     })
+    debug('setting state for updated friends/blocks')
     state.set('friends', { following: [...following], blocking: [...blocking] })
+    debug('emitting event for friends-changed after update')
     events.emit('friends-changed', state.get('friends').toJS())
 
     // also grab the names of these contacts for searching later
@@ -111,26 +112,28 @@ const getFriends = () => state.get('friends')
 const getMe = () => state.get('me')
 const setMe = (me) => {
   state.set('me', me)
+  debug('emitting event me-changed because we set me to %s', me)
   events.emit('me-changed', state.get('me'))
 
   // also get my names and add them to state
   const sbot = state.get('sbot')
-  if (sbot.about) {
-    sbot.about.get((err, authors) => {
+  if (sbot.about && sbot.about.socialValues) {
+    sbot.about.socialValues({ key: 'name', dest: me }, (err, names) => {
       if (err) {
+        debug('sbot errored looking for my names, %s', err.message)
         state.set('myNames', [])
+        debug('emitting empty myNames')
         events.emit('my-names-changed', [])
         return
       }
-      const myNames = new Set()
-      if (authors[me]) {
-        Object.keys(authors[me].name).forEach((setter) => {
-          myNames.add(authors[me].name[setter][0])
-        })
-      }
-      state.set('myNames', [...myNames])
-      events.emit('my-names-changed', [...myNames])
+      const myNamesSet = new Set(Object.values(names)) // remove dupes
+      const myNames = [...myNamesSet]
+      state.set('myNames', myNames)
+      debug('emitting my-names-changed with my names')
+      events.emit('my-names-changed', myNames)
     })
+  } else {
+    debug('sbot.about.socialValues is undefined, cannot get myNames')
   }
 }
 const names = () => state.get('myNames')
@@ -371,7 +374,6 @@ actions = module.exports = {
     get: getAll,
     getJS: () => getAll().toJS(),
     setName,
-    setGoodName,
     getName,
     getId,
     findMatches,

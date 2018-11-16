@@ -24,6 +24,7 @@ const start = (config) => {
     .use(require('scuttlebot/plugins/replicate'))
     .use(require('scuttlebot/plugins/invite'))
     .use(require('scuttlebot/plugins/local'))
+    .use(require('ssb-backlinks'))
     .use(require('ssb-about'))
     .use(require('ssb-ebt'))
     .use(require('ssb-friends'))

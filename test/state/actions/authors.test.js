@@ -5,101 +5,9 @@ const state = require('../../../state/index')
 const events = require('../../../state/events')
 const actions = require('../../../state/actions')
 
-test('authors: setGoodName: uses my identification of another person', (t) => {
-  // takes in an id and an authors object and
-  // determines the latest self-identification
-  // or the latest identification by `me`,
-  // preferring the latest identification by `me`.
-  // `me` in this case is the id in `state.me`
-  state.set('me', 'me123')
-  const id = 'you123'
-  const authors = {
-    me123: {
-      name: {
-        me123: ['myself', 5], // who did it: ['what they did', 'when they did it']
-        him234: ['pete', 6]
-      }
-    },
-    you123: {
-      name: {
-        me123: ['you', 2],
-        him234: ['someone', 3],
-        you123: ['you123', 3]
-      }
-    }
-  }
-  actions.authors.setGoodName(id, authors)
-
-  // we asked the action to find the name for 'you123' given the authors object
-  // you123 was identified by me (me123) as 'you' and by themselves (you123) as 'you123'
-  // this action should select my own identification of you123: 'you'.
-  t.is(state.getIn(['authors', id]), 'you')
-})
-
-test('authors: setGoodName: uses someone\'s self-identification', (t) => {
-  state.set('me', 'me123')
-  const id = 'you123'
-  const authors = {
-    me123: {
-      name: {
-        me123: ['myself', 5], // who did it: ['what they did', 'when they did it']
-        him234: ['pete', 6]
-      }
-    },
-    you123: {
-      name: {
-        me123: ['you', 2],
-        him234: ['someone', 3],
-        you123: ['you123', 3]
-      }
-    }
-  }
-  // if we remove the entry from authors that i set for you123
-  delete authors.you123.name.me123
-  // then the action should return you123's own identification of themselves (you123)
-
-  actions.authors.setGoodName(id, authors)
-  t.is(state.getIn(['authors', id]), 'you123')
-})
-
-test('authors: setGoodName: sets name as id if we dont know it', (t) => {
-  state.set('me', 'me123')
-  const authors = {
-    me123: {
-      name: {
-        me123: ['myself', 5], // who did it: ['what they did', 'when they did it']
-        him234: ['pete', 6]
-      }
-    },
-    you123: {
-      name: {
-        me123: ['you', 2],
-        him234: ['someone', 3],
-        you123: ['you123', 3]
-      }
-    }
-  }
-  // if sbot has no abouts for someone that shouldn't be a problem
-  // we will just use the id
-  actions.authors.setGoodName('bad123', authors)
-  t.is(state.getIn(['authors', 'bad123']), 'bad123')
-})
-
-test('authors: setName', (t) => {
-  // this calls setGoodName with an authors object it gets from sbot
-  // we will stub setGoodName so we know it gets called
-  sinon.stub(actions.authors, 'setGoodName')
-  const fakeAuthors = {
-    me123: {},
-    you123: {}
-  }
-  class Sbot {
-    constructor () {
-      this.about = {
-        get: (cb) => { cb(null, fakeAuthors) }
-      }
-    }
-  }
+test.serial('authors: setName sets a name', (t) => {
+  const socialValue = sinon.stub().callsArgWith(1, null, 'pete')
+  class Sbot { constructor () { this.about = { socialValue } } }
   const sbot = new Sbot()
   state.set('sbot', sbot)
   const id = 'me123'
@@ -109,45 +17,26 @@ test('authors: setName', (t) => {
   const listenerStub = sinon.stub()
   events.on('authors-changed', listenerStub)
 
-  actions.authors.setName(id)
+  return actions.authors.setName(id)
+    .then(() => {
+      t.is(state.getIn(['authors', 'me123']), 'pete')
+      t.true(listenerStub.calledOnce)
+      listenerStub.resetHistory()
+    })
+})
 
-  let correctCalledWith = actions.authors.setGoodName.calledWith(id, fakeAuthors)
-  t.true(correctCalledWith)
-  t.true(listenerStub.calledOnce)
-
-  actions.authors.setGoodName.resetHistory()
-  listenerStub.resetHistory()
-
-  // can also pass an array of ids to setName
-  const ids = ['abc123', 'def456']
-  actions.authors.setName(ids)
-
-  correctCalledWith = actions
-    .authors
-    .setGoodName
-    .firstCall
-    .calledWith(ids[0], fakeAuthors) &&
-  actions
-    .authors
-    .setGoodName
-    .secondCall
-    .calledWith(ids[1], fakeAuthors)
-
-  t.true(correctCalledWith)
-  t.true(listenerStub.calledOnce) // one event even for multiple updates
-  actions.authors.setGoodName.resetHistory()
-  listenerStub.resetHistory()
-
-  // if there is an error from sbot
-  // it won't call anything or emit anything
-  sbot.about.get = (cb) => (new Error('bad'))
+test.serial('authors: setName only emits once for multiple calls', (t) => {
+  const socialValue = sinon.stub().callsArgWith(1, null, 'a name')
+  class Sbot { constructor () { this.about = { socialValue } } }
+  const sbot = new Sbot()
   state.set('sbot', sbot)
-  actions.authors.setName(ids)
-  t.true(actions.authors.setGoodName.notCalled)
-  t.true(listenerStub.notCalled)
-
-  listenerStub.resetHistory()
-  actions.authors.setGoodName.restore()
+  const listenerStub = sinon.stub()
+  events.on('authors-changed', listenerStub)
+  const ids = ['abc123', 'def456']
+  return actions.authors.setName(ids).then(() => {
+    t.true(listenerStub.calledOnce)
+    listenerStub.resetHistory()
+  })
 })
 
 test('authors: getName', (t) => {

@@ -1,3 +1,4 @@
+const debug = require('debug')('ssb-chat-core')
 const pull = require('pull-stream')
 const unique = require('pull-stream/throughs/unique')
 const connect = require('./connect')
@@ -30,7 +31,9 @@ module.exports = {
   recents: actions.recents,
   progress: actions.progress,
   start: (opts, cb) => {
+    debug('attempting to start up sbot with %o options', opts)
     if (started) {
+      debug('avoiding double start of sbot')
       // don't double start, thanks @korlando7
       cb()
       return
@@ -48,6 +51,7 @@ module.exports = {
 
     connect.start((err, server) => {
       if (err) {
+        debug('error starting sbot: %O', err)
         return cb(err)
       }
 
@@ -82,7 +86,7 @@ module.exports = {
         unique(JSON.stringify),
         pull.drain(actions.progress.set)
       )
-
+      debug('started pulling msgs and index progress from sbot')
       // let caller know that we are ready to rock n roll
       cb()
     })

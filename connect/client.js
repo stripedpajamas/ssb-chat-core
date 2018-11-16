@@ -17,6 +17,9 @@ const startServer = () => {
         'ignore',
         'ignore',
         'ignore',
+        // 'inherit',
+        // 'inherit',
+        // 'inherit',
         'ipc'
       ]
     })

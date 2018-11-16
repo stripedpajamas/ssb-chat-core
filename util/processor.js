@@ -1,3 +1,4 @@
+const debug = require('debug')('ssb-chat-core:processor')
 const Immutable = require('immutable')
 const actions = require('../state/actions')
 const constants = require('./constants')
@@ -9,6 +10,7 @@ const {
 } = actions
 
 const processor = (msg) => {
+  debug('processing message %O', msg)
   const m = msg.value
   const me = meState.get()
 
