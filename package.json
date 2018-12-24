@@ -34,7 +34,7 @@
     "nanobus": "^4.3.3",
     "node-persist": "^2.1.0",
     "pull-stream": "^3.6.7",
-    "scuttlebot": "^12.2.3",
+    "ssb-server": "^13.0.0",
     "ssb-about": "^2.0.0",
     "ssb-backlinks": "^0.7.3",
     "ssb-client": "^4.6.0",
